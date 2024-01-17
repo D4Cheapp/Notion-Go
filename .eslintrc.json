@@ -1,15 +1,17 @@
 {
   "root": true,
-  "parser": "@babel/eslint-parser",
-  "plugins": ["import"],
-  "extends": ["prettier"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint", "import"],
+  "extends": ["plugin:@typescript-eslint/recommended-type-checked", "prettier"],
   "rules": {
     "import/order": [
-      "error",
+      1,
       { "groups": ["external", "builtin", "internal", "sibling", "parent", "index"] }
     ],
     "@typescript-eslint/ban-ts-comment": 0,
     "no-unused-vars": "off"
   }
 }
-

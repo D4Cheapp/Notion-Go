@@ -1,5 +1,5 @@
-import { Colors } from 'constants/theme';
 import { Text, Modal, View, StyleSheet, Pressable } from 'react-native';
+import { Colors } from 'constants/theme';
 
 interface ModalWindowInterface {
   title: string;
@@ -78,8 +78,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: Colors.seaSalt,
     borderStyle: 'solid',
-    maxWidth: '90%',
-    maxHeight: '70%',
+    width: '85%',
     padding: 30,
     gap: 15,
     flexDirection: 'column',
@@ -87,19 +86,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonContainer: {
-    flexDirection: 'row',
+    width: '100%',
+    flexDirection: 'column',
     justifyContent: 'space-around',
     alignItems: 'center',
-    gap: 20,
+    gap: 15,
   },
   button: {
-    width: '45%',
+    width: '100%',
     borderRadius: 5,
     paddingVertical: 5,
     backgroundColor: Colors.electricIndigo,
   },
   buttonText: {
-    fontSize: 17,
+    fontSize: 20,
     textAlign: 'center',
     color: Colors.seaSalt,
   },

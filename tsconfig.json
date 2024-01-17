@@ -14,22 +14,11 @@
     "jsx": "preserve",
     "incremental": false,
     "paths": {
-      "components/*": [
-        "./components/*"
-      ],
-      "constants/*": [
-        "./constants/*"
-      ]
+      "components/*": ["./components/*"],
+      "constants/*": ["./constants/*"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "build/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    ".yarn"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", "build/types/**/*.ts"],
+  "exclude": ["node_modules", ".yarn"],
   "extends": "expo/tsconfig.base"
 }
