@@ -11,8 +11,8 @@ module.exports = function (api) {
             ".tsx"
           ],
           alias: {
-            components: './components',
-            constants: './constants'
+            components: './src/components',
+            constants: './src/constants'
           }
         }
       ]

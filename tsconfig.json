@@ -14,8 +14,8 @@
     "jsx": "preserve",
     "incremental": false,
     "paths": {
-      "components/*": ["./components/*"],
-      "constants/*": ["./constants/*"]
+      "components/*": ["./src/components/*"],
+      "constants/*": ["./src/constants/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "build/types/**/*.ts"],
