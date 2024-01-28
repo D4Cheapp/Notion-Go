@@ -7,27 +7,28 @@ import {
   PartialDatabaseObjectResponse,
   PartialPageObjectResponse,
 } from '@notionhq/client/build/src/api-endpoints';
-import { useErrorBoundary } from 'react-error-boundary';
-import { todoViewType } from 'src/layout';
-import { CalendarView, ListView } from './components';
+import { TodoViewType } from 'src/layout';
+import ListView from './components/ListView';
+import CalendarView from './components/CalendarView';
+import { useErrorMessage } from '../../hooks/useErrorMessage';
 
-interface TodoCalendarInterface {
+interface Props {
   client?: Client;
   database_id?: string | null;
-  todoView: todoViewType;
+  todoView: TodoViewType;
 }
 
-type tasksType = (
+type TasksType = (
   | PageObjectResponse
   | PartialPageObjectResponse
   | PartialDatabaseObjectResponse
   | DatabaseObjectResponse
 )[];
 
-function Todo({ client, database_id, todoView }: TodoCalendarInterface) {
-  const [tasks, setTask] = useState<tasksType>([]);
+function Todo({ client, database_id, todoView }: Props) {
+  const [tasks, setTask] = useState<TasksType>([]);
   const [isFetching, setIsFetching] = useState<boolean>(false);
-  const { showBoundary } = useErrorBoundary();
+  const errorHandler = useErrorMessage();
 
   const loadTasks = () => {
     const isReadyToServerFetch = client && typeof database_id === 'string';
@@ -44,11 +45,11 @@ function Todo({ client, database_id, todoView }: TodoCalendarInterface) {
     await client?.databases
       .query({
         //@ts-ignore
-        database_id: '12qeq2eq223',
+        database_id,
         page_size: 100,
       })
       .then((data) => setTask(data.results))
-      .catch((error) => showBoundary(error))
+      .catch((error: Error) => errorHandler(error.message))
       .finally(() => setIsFetching(false));
   };
 
@@ -57,8 +58,7 @@ function Todo({ client, database_id, todoView }: TodoCalendarInterface) {
   };
 
   useEffect(() => {
-    // loadTasks();
-    void serverTaskLoad();
+    loadTasks();
   }, []);
 
   return (

@@ -2,17 +2,17 @@
 import React, { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import { Pressable, View, Image, Text, TextInput } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import { ModalWindow } from 'components/ModalWindow';
-import { todoViewType } from 'src/layout';
+import { TodoViewType } from 'src/layout';
+import ModalWindow from 'components/ModalWindow';
 import { styles } from './HeaderStyles';
 
-interface HeaderInterface {
+interface Props {
   authAttempt: () => Promise<void>;
-  taskView: todoViewType;
-  setTaskView: Dispatch<SetStateAction<todoViewType>>;
+  taskView: TodoViewType;
+  setTaskView: Dispatch<SetStateAction<TodoViewType>>;
 }
 
-function Header({ taskView, setTaskView, authAttempt }: HeaderInterface) {
+function Header({ taskView, setTaskView, authAttempt }: Props) {
   const [isOptionModalWindow, setOptionModalWindow] = useState(false);
   const [authKey, setAuthKey] = useState<string>();
   const [databaseId, setDatabaseId] = useState<string>();

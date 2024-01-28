@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Client } from '@notionhq/client';
-import { useErrorBoundary } from 'react-error-boundary';
 import * as SecureStore from 'expo-secure-store';
-import { Header, Todo } from './components';
+import Todo from 'components/Todo';
+import Header from 'components/Header';
 
-export type todoViewType = 'calendar' | 'list';
+export type TodoViewType = 'calendar' | 'list';
 
 function Layout() {
-  const [taskView, setTaskView] = useState<todoViewType>('list');
+  const [taskView, setTaskView] = useState<TodoViewType>('list');
   const [client, setClient] = useState<Client>();
   const [authData, setAuthData] = useState<{
     auth_key: string | null;
     database_id: string | null;
   }>();
-  const { showBoundary } = useErrorBoundary();
 
   const getAuthData = async () => {
     const auth_key = await SecureStore.getItemAsync('auth_key');
@@ -23,14 +22,10 @@ function Layout() {
 
   const getClient = () => {
     if (authData?.auth_key && authData?.database_id) {
-      try {
-        const client = new Client({
-          auth: authData.auth_key,
-        });
-        setClient(client);
-      } catch (error) {
-        showBoundary(error);
-      }
+      const client = new Client({
+        auth: authData.auth_key,
+      });
+      setClient(client);
     }
   };
 

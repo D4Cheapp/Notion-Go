@@ -1,9 +1,9 @@
 import { Text, View } from 'react-native';
 import React from 'react';
 
-interface TodoListInterface {}
+interface Props {}
 
-function ListView({}: TodoListInterface) {
+function ListView({}: Props) {
   return (
     <View>
       <Text>TodoList</Text>

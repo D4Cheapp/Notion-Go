@@ -21,10 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#1A1C22"
-      }
-    },
-    "web": {
-      "favicon": "./src/assets/images/favicon.png"
+      },
+      "package": "com.d4cheap.NotionWidget"
     }
   }
 }

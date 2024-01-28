@@ -1,3 +1,1 @@
-import { CalendarView } from '..';
-
-export { CalendarView };
+export { default } from './CalendarView';

@@ -2,14 +2,6 @@ import { StyleSheet } from "react-native";
 import { Colors } from "constants/theme";
 
 export const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    zIndex: 10,
-    width: '100%',
-    flex: 1,
-    alignItems: 'center',
-    marginTop: 20,
-  },
   errorContainer: {
     maxWidth: '85%',
     borderColor: Colors.seaSalt,

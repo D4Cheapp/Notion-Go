@@ -1,7 +1,7 @@
 import { Text, Modal, View, Pressable } from 'react-native';
 import { styles } from './ModalWindowStyles';
 
-interface ModalWindowInterface {
+interface Props {
   title: string;
   isWindowActive: boolean;
   closeAction: () => void;
@@ -9,13 +9,7 @@ interface ModalWindowInterface {
   children?: React.ReactNode;
 }
 
-function ModalWindow({
-  title,
-  isWindowActive,
-  action,
-  closeAction,
-  children,
-}: ModalWindowInterface) {
+function ModalWindow({ title, isWindowActive, action, closeAction, children }: Props) {
   return (
     <Modal animationType="fade" transparent visible={isWindowActive}>
       <View style={styles.background}>

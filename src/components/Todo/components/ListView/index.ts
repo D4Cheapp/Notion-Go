@@ -1,3 +1,1 @@
-import { ListView } from '..';
-
-export { ListView };
+export { default } from './ListView'
