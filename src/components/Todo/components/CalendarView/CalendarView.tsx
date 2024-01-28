@@ -1,0 +1,12 @@
+import { Text, View } from 'react-native';
+import React from 'react';
+
+function CalendarView() {
+  return (
+    <View>
+      <Text>TodoCalendar</Text>
+    </View>
+  );
+}
+
+export default CalendarView;
