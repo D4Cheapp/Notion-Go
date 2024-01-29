@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Button, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Easing, View } from 'react-native';
 import { Client } from '@notionhq/client';
 import {
   DatabaseObjectResponse,
@@ -9,6 +9,7 @@ import {
 } from '@notionhq/client/build/src/api-endpoints';
 import { TodoViewType } from 'src/layout';
 import ListView from './components/ListView';
+import { styles } from './TodoStyles';
 import CalendarView from './components/CalendarView';
 import { useErrorMessage } from '../../hooks/useErrorMessage';
 
@@ -18,7 +19,7 @@ interface Props {
   todoView: TodoViewType;
 }
 
-type TasksType = (
+export type TasksType = (
   | PageObjectResponse
   | PartialPageObjectResponse
   | PartialDatabaseObjectResponse
@@ -28,7 +29,13 @@ type TasksType = (
 function Todo({ client, database_id, todoView }: Props) {
   const [tasks, setTask] = useState<TasksType>([]);
   const [isFetching, setIsFetching] = useState<boolean>(false);
+  const loadingAnimation = useRef(new Animated.Value(0)).current;
   const errorHandler = useErrorMessage();
+
+  const spin = loadingAnimation.interpolate({
+    inputRange: [0, 1, 2],
+    outputRange: ['0deg', '360deg', "720deg"],
+  });
 
   const loadTasks = () => {
     const isReadyToServerFetch = client && typeof database_id === 'string';
@@ -58,15 +65,37 @@ function Todo({ client, database_id, todoView }: Props) {
   };
 
   useEffect(() => {
-    loadTasks();
+    // loadTasks();
+    setIsFetching(true);
   }, []);
 
-  return (
-    <View>
-      {todoView === 'calendar' && <CalendarView />}
-      {todoView === 'list' && <ListView />}
+  useEffect(() => {
+    if (isFetching) {
+      Animated.loop(
+        Animated.timing(loadingAnimation, {
+          toValue: 2,
+          duration: 3000,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        }),
+      ).start();
+    }
+  }, [isFetching]);
 
-      <Button title="Загрузить задачи" onPress={loadTasks} />
+  return (
+    <View style={styles.todoContainer}>
+      {isFetching ? (
+        <View style={styles.loadingContainer}>
+          <Animated.View
+            style={{ ...styles.loadingCircle, transform: [{ rotate: spin }] }}
+          />
+        </View>
+      ) : (
+        <>
+          {todoView === 'calendar' && <CalendarView tasks={tasks} />}
+          {todoView === 'list' && <ListView tasks={tasks} />}
+        </>
+      )}
     </View>
   );
 }
