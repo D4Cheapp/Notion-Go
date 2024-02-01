@@ -38,6 +38,10 @@ function Layout() {
     void authAttempt();
   }, []);
 
+  useEffect(() => {
+    void authAttempt();
+  }, [authData?.auth_key, authData?.database_id]);
+
   return (
     <>
       <Header taskView={taskView} setTaskView={setTaskView} authAttempt={authAttempt} />

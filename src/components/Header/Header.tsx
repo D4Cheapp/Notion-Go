@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React, { Dispatch, SetStateAction, useCallback, useState } from 'react';
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { Pressable, View, Image, Text, TextInput } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import { TodoViewType } from 'src/layout';
 import ModalWindow from 'components/ModalWindow';
+import { TodoViewType } from 'src/layout';
 import { styles } from './HeaderStyles';
 
 interface Props {
@@ -41,6 +41,21 @@ function Header({ taskView, setTaskView, authAttempt }: Props) {
   const onCalendarClick = () =>
     setTaskView(taskView === 'calendar' ? 'list' : 'calendar');
 
+  const loadAuthData = async () => {
+    const databaseId = await SecureStore.getItemAsync('database_id');
+    const authKey = await SecureStore.getItemAsync('auth_key');
+
+    if (databaseId) {
+      setDatabaseId(databaseId);
+    }
+
+    if (authKey) {
+      setAuthKey(authKey);
+    }
+  };
+
+  useEffect(() => void loadAuthData(), []);
+
   return (
     <View style={styles.header}>
       <Pressable onPress={onCalendarClick}>
@@ -67,12 +82,20 @@ function Header({ taskView, setTaskView, authAttempt }: Props) {
           <View style={styles.dataContentContainer}>
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Ключ интеграции notion</Text>
-              <TextInput onChangeText={onAuthKeyInput} style={styles.input} />
+              <TextInput
+                onChangeText={onAuthKeyInput}
+                defaultValue={authKey}
+                style={styles.input}
+              />
             </View>
 
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>ID базы данных</Text>
-              <TextInput onChangeText={onDatabaseIdInput} style={styles.input} />
+              <TextInput
+                onChangeText={onDatabaseIdInput}
+                defaultValue={databaseId}
+                style={styles.input}
+              />
             </View>
           </View>
         </ModalWindow>

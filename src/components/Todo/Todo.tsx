@@ -1,13 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Animated, Easing, View } from 'react-native';
 import { Client } from '@notionhq/client';
-import {
-  DatabaseObjectResponse,
-  PageObjectResponse,
-  PartialDatabaseObjectResponse,
-  PartialPageObjectResponse,
-} from '@notionhq/client/build/src/api-endpoints';
 import { TodoViewType } from 'src/layout';
+import { TaskType } from 'src/types';
 import ListView from './components/ListView';
 import { styles } from './TodoStyles';
 import CalendarView from './components/CalendarView';
@@ -19,22 +14,15 @@ interface Props {
   todoView: TodoViewType;
 }
 
-export type TasksType = (
-  | PageObjectResponse
-  | PartialPageObjectResponse
-  | PartialDatabaseObjectResponse
-  | DatabaseObjectResponse
-)[];
-
 function Todo({ client, database_id, todoView }: Props) {
-  const [tasks, setTask] = useState<TasksType>([]);
+  const [tasks, setTask] = useState<TaskType[]>([]);
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const loadingAnimation = useRef(new Animated.Value(0)).current;
   const errorHandler = useErrorMessage();
 
   const spin = loadingAnimation.interpolate({
     inputRange: [0, 1, 2],
-    outputRange: ['0deg', '360deg', "720deg"],
+    outputRange: ['0deg', '360deg', '720deg'],
   });
 
   const loadTasks = () => {
@@ -55,6 +43,7 @@ function Todo({ client, database_id, todoView }: Props) {
         database_id,
         page_size: 100,
       })
+      //@ts-ignore
       .then((data) => setTask(data.results))
       .catch((error: Error) => errorHandler(error.message))
       .finally(() => setIsFetching(false));
@@ -65,9 +54,8 @@ function Todo({ client, database_id, todoView }: Props) {
   };
 
   useEffect(() => {
-    // loadTasks();
-    setIsFetching(true);
-  }, []);
+    loadTasks();
+  }, [client]);
 
   useEffect(() => {
     if (isFetching) {

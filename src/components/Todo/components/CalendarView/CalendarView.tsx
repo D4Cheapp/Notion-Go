@@ -1,9 +1,9 @@
 import { Text, View } from 'react-native';
 import React from 'react';
-import { TasksType } from 'components/Todo/Todo';
+import { TaskType } from 'src/types';
 
 interface Props {
-  tasks: TasksType;
+  tasks: TaskType[];
 }
 
 function CalendarView({ tasks }: Props) {
