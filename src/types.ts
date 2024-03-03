@@ -37,8 +37,7 @@ export type TaskType = {
       }[];
       type: 'title';
     };
-    Checkbox: { checkbox: boolean; id: string; type: 'checkbox' };
-    Date: {
+    Date?: {
       id: string;
       type: 'date';
       date: {
@@ -46,5 +45,22 @@ export type TaskType = {
         start: string;
       };
     };
+    Urgency?: {
+      select: {
+        color: string;
+        id: string;
+        name: 'Не срочно' | 'Срочно';
+      };
+      type: 'select';
+    };
+    Importance?: {
+      select: {
+        color: string;
+        id: string;
+        name: 'Важно' | 'Не важно';
+      };
+      type: 'select';
+    };
+    Done: { checkbox: boolean; id: string; type: 'checkbox' };
   };
 };

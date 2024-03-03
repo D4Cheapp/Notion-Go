@@ -13,7 +13,7 @@ function Task({ task }: Props): React.ReactNode {
 
   return (
     <View style={styles.root}>
-      <Checkbox value={task.properties.Checkbox.checkbox} />
+      <Checkbox value={task.properties.Done.checkbox} />
       <Text style={styles.title}>{title}</Text>
     </View>
   );
