@@ -7,7 +7,7 @@ interface Props {
 }
 
 function CalendarView({ tasks }: Props) {
-  console.log(tasks);
+  tasks
 
   return (
     <View>
