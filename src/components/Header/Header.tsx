@@ -1,21 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, View, Image, Text, TextInput } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import ModalWindow from 'components/ModalWindow';
-import { TodoViewType } from 'src/layout';
+import { taskViewSelector } from 'src/reduxjs/base/selectors';
 import { styles } from './HeaderStyles';
+import ModalWindow from '@/components/ModalWindow';
+import { useActions, useAppSelector } from '@/hooks/reduxHooks';
 
-interface Props {
-  authAttempt: () => Promise<void>;
-  taskView: TodoViewType;
-  setTaskView: Dispatch<SetStateAction<TodoViewType>>;
-}
-
-function Header({ taskView, setTaskView, authAttempt }: Props) {
+function Header() {
   const [isOptionModalWindow, setOptionModalWindow] = useState(false);
   const [authKey, setAuthKey] = useState<string>();
   const [databaseId, setDatabaseId] = useState<string>();
+  const { getClientInfo, setTaskView } = useActions();
+  const taskView = useAppSelector(taskViewSelector);
 
   const onAuthKeyInput = (data: string) => setAuthKey(data);
 
@@ -27,28 +23,25 @@ function Header({ taskView, setTaskView, authAttempt }: Props) {
     if (authKey) {
       await SecureStore.setItemAsync('auth_key', authKey);
     }
-
     if (databaseId) {
       await SecureStore.setItemAsync('database_id', databaseId);
     }
-
-    await authAttempt();
+    if (databaseId && authKey) {
+      getClientInfo({ auth_key: authKey, database_id: databaseId });
+    }
     setOptionModalWindow(false);
   }, [authKey, databaseId]);
 
   const onOptionCloseClick = useCallback(() => setOptionModalWindow(false), []);
 
-  const onCalendarClick = () =>
-    setTaskView(taskView === 'calendar' ? 'list' : 'calendar');
+  const onCalendarClick = () => setTaskView(taskView === 'calendar' ? 'list' : 'calendar');
 
   const loadAuthData = async () => {
     const databaseId = await SecureStore.getItemAsync('database_id');
     const authKey = await SecureStore.getItemAsync('auth_key');
-
     if (databaseId) {
       setDatabaseId(databaseId);
     }
-
     if (authKey) {
       setAuthKey(authKey);
     }
@@ -60,17 +53,16 @@ function Header({ taskView, setTaskView, authAttempt }: Props) {
     <View style={styles.header}>
       <Pressable onPress={onCalendarClick}>
         <Image
-          style={{ height: 35, width: 35 }}
+          style={styles.taskViewImage}
           source={
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             taskView === 'calendar'
               ? require('../../assets/images/calendar.png')
               : require('../../assets/images/list.png')
           }
         />
       </Pressable>
-
       <Text style={styles.title}>Notion Todo</Text>
-
       <View>
         <ModalWindow
           title="Notion api"
@@ -88,7 +80,6 @@ function Header({ taskView, setTaskView, authAttempt }: Props) {
                 style={styles.input}
               />
             </View>
-
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>ID базы данных</Text>
               <TextInput
@@ -99,10 +90,10 @@ function Header({ taskView, setTaskView, authAttempt }: Props) {
             </View>
           </View>
         </ModalWindow>
-
         <Pressable onPress={onOptionClick}>
           <Image
-            style={{ height: 40, width: 40 }}
+            style={styles.settingsImage}
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             source={require('../../assets/images/settings.png')}
           />
         </Pressable>

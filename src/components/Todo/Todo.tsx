@@ -1,64 +1,25 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Animated, Easing, View } from 'react-native';
-import { Client } from '@notionhq/client';
-import { TodoViewType } from 'src/layout';
-import { TaskType } from 'src/types';
+import { isLoadingSelector, taskViewSelector } from 'src/reduxjs/base/selectors';
+import { tasksSelector } from 'src/reduxjs/api/selectors';
 import ListView from './components/ListView';
-import { styles } from './TodoStyles';
 import CalendarView from './components/CalendarView';
-import { useErrorMessage } from '../../hooks/useErrorMessage';
+import { styles } from './TodoStyles';
+import { useAppSelector } from '@/hooks/reduxHooks';
 
-interface Props {
-  client?: Client;
-  database_id?: string | null;
-  todoView: TodoViewType;
-}
-
-function Todo({ client, database_id, todoView }: Props) {
-  const [tasks, setTask] = useState<TaskType[]>([]);
-  const [isFetching, setIsFetching] = useState<boolean>(false);
+function Todo() {
   const loadingAnimation = useRef(new Animated.Value(0)).current;
-  const errorHandler = useErrorMessage();
+  const taskView = useAppSelector(taskViewSelector);
+  const tasks = useAppSelector(tasksSelector);
+  const isLoading = useAppSelector(isLoadingSelector);
 
   const spin = loadingAnimation.interpolate({
     inputRange: [0, 1, 2],
     outputRange: ['0deg', '360deg', '720deg'],
   });
 
-  const loadTasks = () => {
-    const isReadyToServerFetch = client && typeof database_id === 'string';
-    setIsFetching(true);
-
-    if (isReadyToServerFetch) {
-      void serverTaskLoad();
-    } else {
-      void localTaskLoad();
-    }
-  };
-
-  const serverTaskLoad = async () => {
-    await client?.databases
-      .query({
-        //@ts-ignore
-        database_id,
-        page_size: 100,
-      })
-      //@ts-ignore
-      .then((data) => setTask(data.results))
-      .catch((error: Error) => errorHandler(error.message))
-      .finally(() => setIsFetching(false));
-  };
-
-  const localTaskLoad = () => {
-    setIsFetching(false);
-  };
-
   useEffect(() => {
-    loadTasks();
-  }, [client]);
-
-  useEffect(() => {
-    if (isFetching) {
+    if (isLoading) {
       Animated.loop(
         Animated.timing(loadingAnimation, {
           toValue: 2,
@@ -68,20 +29,18 @@ function Todo({ client, database_id, todoView }: Props) {
         }),
       ).start();
     }
-  }, [isFetching]);
+  }, [isLoading]);
 
   return (
     <View style={styles.todoContainer}>
-      {isFetching ? (
+      {isLoading ? (
         <View style={styles.loadingContainer}>
-          <Animated.View
-            style={{ ...styles.loadingCircle, transform: [{ rotate: spin }] }}
-          />
+          <Animated.View style={{ ...styles.loadingCircle, transform: [{ rotate: spin }] }} />
         </View>
       ) : (
         <>
-          {todoView === 'calendar' && <CalendarView tasks={tasks} />}
-          {todoView === 'list' && <ListView tasks={tasks} />}
+          {taskView === 'calendar' && <CalendarView tasks={tasks} />}
+          {taskView === 'list' && <ListView tasks={tasks} />}
         </>
       )}
     </View>

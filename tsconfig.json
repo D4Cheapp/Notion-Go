@@ -14,9 +14,9 @@
     "jsx": "preserve",
     "incremental": false,
     "paths": {
-      "hooks/*": ["./src/hooks/*"],
-      "components/*": ["./src/components/*"],
-      "constants/*": ["./src/constants/*"]
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/constants/*": ["./src/constants/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "build/types/**/*.ts"],

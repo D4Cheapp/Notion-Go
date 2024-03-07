@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Colors } from 'constants/theme';
+import { Colors } from '@/constants/theme';
 
 export const styles = StyleSheet.create({
   header: {
@@ -45,4 +45,6 @@ export const styles = StyleSheet.create({
     paddingVertical: 5,
     fontSize: 18,
   },
+  settingsImage: { height: 35, width: 35 },
+  taskViewImage: { height: 40, width: 40 },
 });

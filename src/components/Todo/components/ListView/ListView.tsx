@@ -24,32 +24,23 @@ function ListView({ tasks }: Props) {
       <View style={styles.header}>
         <Pressable
           onPress={onActiveListClick}
-          style={[
-            listView === 'active' && styles.activeHeaderButton,
-            styles.headerButton,
-          ]}
+          style={[listView === 'active' && styles.activeHeaderButton, styles.headerButton]}
         >
           <Text style={styles.buttonText}>Active</Text>
         </Pressable>
 
         <Pressable
           onPress={onJournalListClick}
-          style={[
-            listView === 'journal' && styles.activeHeaderButton,
-            styles.headerButton,
-          ]}
+          style={[listView === 'journal' && styles.activeHeaderButton, styles.headerButton]}
         >
           <Text style={styles.buttonText}>Journal</Text>
         </Pressable>
       </View>
 
       <View style={styles.taskContainer}>
-        {listView === 'active' && tasks.map((task) => <Task key={task.id} task={task} />)}
-        {listView === 'journal' &&
-          tasks.map(
-            (task) =>
-              task.properties.Done.checkbox && <Task key={task.id} task={task} />,
-          )}
+        {listView === 'active' && tasks && tasks.map((task) => <Task key={task.id} task={task} />)}
+        {listView === 'journal' && tasks && 
+          tasks.map((task) => task.properties.Done.checkbox && <Task key={task.id} task={task} />)}
       </View>
     </>
   );
