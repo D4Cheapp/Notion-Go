@@ -179,3 +179,4 @@ yarn-error.log*
 
 # React Native
 .expo
+%ProgramData%

@@ -1,72 +1,48 @@
-import { useEffect, useState } from 'react';
-import { Button, View } from 'react-native';
-import { Client } from '@notionhq/client';
-import {
-  DatabaseObjectResponse,
-  PageObjectResponse,
-  PartialDatabaseObjectResponse,
-  PartialPageObjectResponse,
-} from '@notionhq/client/build/src/api-endpoints';
-import { TodoViewType } from 'src/layout';
+import { useEffect, useRef } from 'react';
+import { Animated, Easing, View } from 'react-native';
+import { isLoadingSelector, taskViewSelector } from 'src/reduxjs/base/selectors';
+import { tasksSelector } from 'src/reduxjs/api/selectors';
 import ListView from './components/ListView';
 import CalendarView from './components/CalendarView';
-import { useErrorMessage } from '../../hooks/useErrorMessage';
+import { styles } from './TodoStyles';
+import { useAppSelector } from '@/hooks/reduxHooks';
 
-interface Props {
-  client?: Client;
-  database_id?: string | null;
-  todoView: TodoViewType;
-}
+function Todo() {
+  const loadingAnimation = useRef(new Animated.Value(0)).current;
+  const taskView = useAppSelector(taskViewSelector);
+  const tasks = useAppSelector(tasksSelector);
+  const isLoading = useAppSelector(isLoadingSelector);
 
-type TasksType = (
-  | PageObjectResponse
-  | PartialPageObjectResponse
-  | PartialDatabaseObjectResponse
-  | DatabaseObjectResponse
-)[];
-
-function Todo({ client, database_id, todoView }: Props) {
-  const [tasks, setTask] = useState<TasksType>([]);
-  const [isFetching, setIsFetching] = useState<boolean>(false);
-  const errorHandler = useErrorMessage();
-
-  const loadTasks = () => {
-    const isReadyToServerFetch = client && typeof database_id === 'string';
-    setIsFetching(true);
-
-    if (isReadyToServerFetch) {
-      void serverTaskLoad();
-    } else {
-      void localTaskLoad();
-    }
-  };
-
-  const serverTaskLoad = async () => {
-    await client?.databases
-      .query({
-        //@ts-ignore
-        database_id,
-        page_size: 100,
-      })
-      .then((data) => setTask(data.results))
-      .catch((error: Error) => errorHandler(error.message))
-      .finally(() => setIsFetching(false));
-  };
-
-  const localTaskLoad = () => {
-    setIsFetching(false);
-  };
+  const spin = loadingAnimation.interpolate({
+    inputRange: [0, 1, 2],
+    outputRange: ['0deg', '360deg', '720deg'],
+  });
 
   useEffect(() => {
-    loadTasks();
-  }, []);
+    if (isLoading) {
+      Animated.loop(
+        Animated.timing(loadingAnimation, {
+          toValue: 2,
+          duration: 3000,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        }),
+      ).start();
+    }
+  }, [isLoading]);
 
   return (
-    <View>
-      {todoView === 'calendar' && <CalendarView />}
-      {todoView === 'list' && <ListView />}
-
-      <Button title="Загрузить задачи" onPress={loadTasks} />
+    <View style={styles.todoContainer}>
+      {isLoading ? (
+        <View style={styles.loadingContainer}>
+          <Animated.View style={{ ...styles.loadingCircle, transform: [{ rotate: spin }] }} />
+        </View>
+      ) : (
+        <>
+          {taskView === 'calendar' && <CalendarView tasks={tasks} />}
+          {taskView === 'list' && <ListView tasks={tasks} />}
+        </>
+      )}
     </View>
   );
 }

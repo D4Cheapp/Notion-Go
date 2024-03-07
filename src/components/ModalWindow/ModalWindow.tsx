@@ -14,7 +14,6 @@ function ModalWindow({ title, isWindowActive, action, closeAction, children }: P
     <Modal animationType="fade" transparent visible={isWindowActive}>
       <View style={styles.background}>
         <Pressable onPress={closeAction} style={styles.blur} />
-
         <View style={styles.container}>
           <Text style={styles.headerText}>{title}</Text>
           {children}
@@ -24,7 +23,6 @@ function ModalWindow({ title, isWindowActive, action, closeAction, children }: P
                 <Text style={styles.buttonText}>Подтвердить</Text>
               </Pressable>
             )}
-
             <Pressable onPress={closeAction} style={styles.button}>
               <Text style={styles.buttonText}>Закрыть</Text>
             </Pressable>

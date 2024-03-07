@@ -1,20 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { useFonts } from 'expo-font';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Platform, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { registerRootComponent } from 'expo';
-import { setJSExceptionHandler } from 'react-native-exception-handler';
-import { ErrorContext, ErrorType } from 'components/ErrorsContainer/ErrorContext';
-import ErrorFallback from 'components/ErrorsContainer';
-import { Colors } from 'constants/theme';
+import { Provider } from 'react-redux';
+import { useFonts } from 'expo-font';
+import { store } from 'src/reduxjs';
 import Layout from './src/layout';
+import { Colors } from '@/constants/theme';
 
 void SplashScreen.preventAutoHideAsync();
 registerRootComponent(App);
 
 function App() {
-  const [errors, setErrors] = useState<ErrorType[]>([]);
 
   const [fontsLoaded] = useFonts({
     light: require('./src/assets/fonts/Roboto-Light.ttf'),
@@ -22,12 +20,6 @@ function App() {
     bold: require('./src/assets/fonts/Roboto-Bold.ttf'),
   });
 
-  const exceptionHandler = (error: Error) => {
-    const errorObject = { message: error.message, id: Date.now() };
-    setErrors(errors ? [...errors, errorObject] : [errorObject]);
-  };
-
-  setJSExceptionHandler(exceptionHandler, true);
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
@@ -42,15 +34,9 @@ function App() {
   return (
     /* eslint-disable-next-line @typescript-eslint/no-misused-promises */
     <SafeAreaView onLayout={onLayoutRootView} style={styles.container}>
-      <ErrorContext.Provider
-        value={{
-          errors,
-          setErrors,
-        }}
-      >
-        {errors.length !== 0 && <ErrorFallback errors={errors} setErrors={setErrors} />}
-        <Layout />
-      </ErrorContext.Provider>
+      <Provider store={store}>
+          <Layout />
+      </Provider>
     </SafeAreaView>
   );
 }

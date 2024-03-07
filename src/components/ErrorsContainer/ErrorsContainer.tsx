@@ -1,22 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React, { Dispatch, SetStateAction, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { SafeAreaView } from 'react-native';
+import { errorsSelector } from 'src/reduxjs/base/selectors';
 import { styles } from './ErrorsContainerStyles';
-import { ErrorType } from './ErrorContext';
 import ErrorMessage from './ErrorMessage';
+import { useActions, useAppSelector } from '@/hooks/reduxHooks';
 
-interface Props {
-  errors: ErrorType[];
-  setErrors: Dispatch<SetStateAction<ErrorType[]>>;
-}
+function ErrorsContainer() {
+  const errors = useAppSelector(errorsSelector);
+  const { closeError } = useActions();
 
-function ErrorsContainer({ errors, setErrors }: Props) {
-  const onCloseClick = useCallback(
-    (index: number) => {
-      setErrors((errors) => errors.filter((error) => error.id !== index));
-    },
-    [errors],
-  );
+  const onCloseClick = useCallback((index: number) => closeError(index), [errors]);
 
   return (
     <SafeAreaView style={styles.container}>
