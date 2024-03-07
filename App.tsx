@@ -5,8 +5,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { registerRootComponent } from 'expo';
 import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';
-import { store } from 'src/reduxjs';
 import Layout from './src/layout';
+import { store } from '@/reduxjs';
 import { Colors } from '@/constants/theme';
 
 void SplashScreen.preventAutoHideAsync();
