@@ -2,7 +2,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Client } from '@notionhq/client';
 import { TaskType } from 'src/types';
-import { GetAllTasksActionType, GetClientInfoActionType, SetAllTasksActionType, SetClientInfoActionType } from './types';
+import {
+  DeleteTaskActionType,
+  GetAllTasksActionType,
+  GetClientInfoActionType,
+  SetAllTasksActionType,
+  SetCheckStatusActionType,
+  SetClientInfoActionType,
+  SetTaskCheckStatusActionType,
+} from './types';
 
 interface SliceInterface {
   client: Client | null;
@@ -14,12 +22,24 @@ const apiSlice = createSlice({
   name: 'apiSlice',
   initialState: { client: null } as SliceInterface,
   reducers: {
-    getAllTasks: (state, action: GetAllTasksActionType) => state,
-
     getAllTasksLocal: (state) => state,
+
+    getAllTasks: (state, action: GetAllTasksActionType) => state,
 
     setAllTasks: (state, action: SetAllTasksActionType) => {
       state.tasks = action.payload;
+    },
+
+    deleteTask: (state, action: DeleteTaskActionType) => {
+      const task = state.tasks;
+      task.splice(action.payload.index, 1);
+      state.tasks = task;
+    },
+
+    setCheckStatus: (state, action: SetCheckStatusActionType) => {},
+
+    setTaskCheckStatus: (state, action: SetTaskCheckStatusActionType) => {
+      state.tasks[action.payload.index].properties.Done.checkbox = action.payload.check;
     },
 
     getClientInfo: (state, action: SetClientInfoActionType) => {

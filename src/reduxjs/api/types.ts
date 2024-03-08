@@ -13,3 +13,10 @@ export type GetAllTasksActionType = PayloadAction<{
   database_id: string;
   page_size?: number;
 }>;
+export type SetCheckStatusActionType = PayloadAction<{
+  client: Client;
+  task_id: string;
+  checked: boolean;
+}>;
+export type SetTaskCheckStatusActionType = PayloadAction<{ index: number; check: boolean }>;
+export type DeleteTaskActionType = PayloadAction<{ client: Client, index: number; task_id: string }>;

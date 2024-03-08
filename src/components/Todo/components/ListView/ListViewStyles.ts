@@ -15,12 +15,16 @@ export const styles = StyleSheet.create({
   },
   activeHeaderButton: { backgroundColor: Colors.orange, color: Colors.bg },
   buttonText: { textAlign: 'center', color: Colors.fg, fontSize: 20, fontWeight: 'bold' },
+  journalContainer: {
+    gap: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   taskContainer: {
-    width: '80%',
+    width: '100%',
     flexDirection: 'column',
-    alignItems: 'flex-start',
     marginTop: 15,
-    paddingLeft: '5%',
     gap: 20,
   },
 });

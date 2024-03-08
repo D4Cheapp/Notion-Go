@@ -2,7 +2,12 @@ import { all, call, put, takeEvery } from 'redux-saga/effects';
 import { Client } from '@notionhq/client';
 import { apiActions } from './index';
 import { baseActions } from '../base';
-import { GetAllTasksActionType, SetClientInfoActionType } from './types';
+import {
+  DeleteTaskActionType,
+  GetAllTasksActionType,
+  SetCheckStatusActionType,
+  SetClientInfoActionType,
+} from './types';
 
 function* getAllTasksSaga(action: GetAllTasksActionType) {
   yield put(baseActions.setIsLoading(true));
@@ -29,6 +34,26 @@ function* getAllTasksSaga(action: GetAllTasksActionType) {
   yield put(baseActions.setIsLoading(false));
 }
 
+function* deleteTaskSaga(action: DeleteTaskActionType) {
+  const { client, task_id } = action.payload;
+  try {
+    yield client.pages.update({ page_id: task_id, archived: true });
+  } catch (error: unknown) {
+    const errors = error as Error;
+    yield put(baseActions.setError(errors.message));
+  }
+}
+
+function* setCheckStatusSaga(action: SetCheckStatusActionType) {
+  const { client, task_id, checked } = action.payload;
+  try {
+    yield client.pages.update({ page_id: task_id, properties: { Done: { checkbox: checked } } });
+  } catch (error: unknown) {
+    const errors = error as Error;
+    yield put(baseActions.setError(errors.message));
+  }
+}
+
 function* getClientInfoSaga(action: SetClientInfoActionType) {
   yield put(baseActions.setIsLoading(true));
   const { auth_key, database_id } = action.payload;
@@ -49,7 +74,9 @@ function* getClientInfoSaga(action: SetClientInfoActionType) {
 
 export function* apiSaga() {
   yield all([
-    takeEvery(apiActions.getClientInfo, getClientInfoSaga),
     takeEvery(apiActions.getAllTasks, getAllTasksSaga),
+    takeEvery(apiActions.deleteTask, deleteTaskSaga),
+    takeEvery(apiActions.setCheckStatus, setCheckStatusSaga),
+    takeEvery(apiActions.getClientInfo, getClientInfoSaga),
   ]);
 }
