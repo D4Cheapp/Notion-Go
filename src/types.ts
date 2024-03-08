@@ -45,20 +45,20 @@ export type TaskType = {
         start: string;
       };
     };
-    Urgency?: {
+    Urgency: {
       select: {
         color: string;
         id: string;
         name: 'Не срочно' | 'Срочно';
-      };
+      } | null;
       type: 'select';
     };
-    Importance?: {
+    Importance: {
       select: {
         color: string;
         id: string;
         name: 'Важно' | 'Не важно';
-      };
+      } | null;
       type: 'select';
     };
     Done: { checkbox: boolean; id: string; type: 'checkbox' };

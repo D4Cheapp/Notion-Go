@@ -10,6 +10,8 @@ interface Props {
 
 function ListView({ tasks }: Props) {
   const [listView, setListView] = useState<'active' | 'journal'>('active');
+  const isJournal = listView === 'journal';
+  const isActive = listView === 'active';
 
   const onActiveListClick = () => {
     setListView('active');
@@ -24,21 +26,23 @@ function ListView({ tasks }: Props) {
       <View style={styles.header}>
         <Pressable
           onPress={onActiveListClick}
-          style={[listView === 'active' && styles.activeHeaderButton, styles.headerButton]}
+          style={[isActive && styles.activeHeaderButton, styles.headerButton]}
         >
-          <Text style={styles.buttonText}>Active</Text>
+          <Text style={[styles.buttonText, isActive && styles.activeHeaderButton]}>Active</Text>
         </Pressable>
 
         <Pressable
           onPress={onJournalListClick}
-          style={[listView === 'journal' && styles.activeHeaderButton, styles.headerButton]}
+          style={[isJournal && styles.activeHeaderButton, styles.headerButton]}
         >
-          <Text style={styles.buttonText}>Journal</Text>
+          <Text style={[styles.buttonText, isJournal && styles.activeHeaderButton]}>Journal</Text>
         </Pressable>
       </View>
 
       <View style={styles.taskContainer}>
-        {listView === 'active' && tasks && tasks.map((task) => <Task key={task.id} task={task} />)}
+        {listView === 'active' &&
+          tasks &&
+          tasks.map((task) => !task.properties.Done.checkbox && <Task key={task.id} task={task} />)}
         {listView === 'journal' &&
           tasks &&
           tasks.map((task) => task.properties.Done.checkbox && <Task key={task.id} task={task} />)}

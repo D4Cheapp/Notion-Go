@@ -19,11 +19,11 @@ function ModalWindow({ title, isWindowActive, action, closeAction, children }: P
           {children}
           <View style={styles.buttonContainer}>
             {action && (
-              <Pressable onPress={action} style={styles.button}>
+              <Pressable onPress={action} style={[styles.button, styles.confirmButton]}>
                 <Text style={styles.buttonText}>Подтвердить</Text>
               </Pressable>
             )}
-            <Pressable onPress={closeAction} style={styles.button}>
+            <Pressable onPress={closeAction} style={[styles.button, styles.exitButton]}>
               <Text style={styles.buttonText}>Закрыть</Text>
             </Pressable>
           </View>

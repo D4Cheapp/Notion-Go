@@ -14,10 +14,10 @@ export const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderWidth: 5,
-    borderLeftColor: Colors.seaSalt,
-    borderRightColor: Colors.seaSalt,
-    borderBottomColor: Colors.seaSalt,
-    borderTopColor: Colors.raisinBlack,
+    borderLeftColor: Colors.fg,
+    borderRightColor: Colors.fg,
+    borderBottomColor: Colors.fg,
+    borderTopColor: Colors.bg,
     borderRadius: 50
   }
 });

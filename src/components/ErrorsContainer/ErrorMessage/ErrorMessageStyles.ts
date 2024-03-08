@@ -4,7 +4,7 @@ import { Colors } from "@/constants/theme";
 export const styles = StyleSheet.create({
   errorContainer: {
     maxWidth: '85%',
-    borderColor: Colors.seaSalt,
+    borderColor: Colors.fg,
     borderWidth: 2,
     borderRadius: 10,
     paddingVertical: 10,
@@ -16,10 +16,11 @@ export const styles = StyleSheet.create({
   },
   text: {
     width: '90%',
-    color: Colors.seaSalt,
+    color: Colors.fg,
     fontSize: 25,
   },
   closeButton: {
     height: 35,
+    width: 35,
   },
 });
