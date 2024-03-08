@@ -12,14 +12,6 @@
     "prettier": "prettier src/**/*.tsx --check",
     "prettier:fix": "prettier src/**/*.tsx --write"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "prettier src/**/*.tsx --write && tsc && eslint src/**/*.tsx --fix && git add -A ."
-    }
-  },
-  "lint-staged": {
-    "*": "prettier src/**/*.tsx --write && git add -A ."
-  },
   "dependencies": {
     "@expo/webpack-config": "19.0.1",
     "@notionhq/client": "^2.2.14",

@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    color: Colors.seaSalt,
+    color: Colors.fg,
     margin: 0
   },
   priorityContainer: {

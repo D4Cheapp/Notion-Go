@@ -24,10 +24,10 @@ export const styles = StyleSheet.create({
   },
   container: {
     zIndex: 11,
-    backgroundColor: Colors.raisinBlack,
+    backgroundColor: Colors.bg,
     borderWidth: 2,
     borderRadius: 20,
-    borderColor: Colors.seaSalt,
+    borderColor: Colors.fg,
     borderStyle: 'solid',
     width: '85%',
     padding: 30,
@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerText: {
-    color: Colors.seaSalt,
+    color: Colors.fg,
     fontFamily: 'bold',
     fontSize: 30,
     textAlign: 'center',
@@ -53,11 +53,17 @@ export const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 5,
     paddingVertical: 5,
-    backgroundColor: Colors.electricIndigo,
   },
+  confirmButton: {
+backgroundColor: Colors.green,
+   },
+   exitButton: {
+    backgroundColor: Colors.red,
+   },
   buttonText: {
     fontSize: 20,
+    fontWeight: 'bold',
     textAlign: 'center',
-    color: Colors.seaSalt,
+    color: Colors.bg,
   },
 });

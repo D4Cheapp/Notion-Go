@@ -14,7 +14,7 @@ const Property = ({ text, color }: Props): React.ReactNode => {
       <Text
         style={{
           ...styles.priorityProperty,
-          ...{ borderColor: color === 'red' ? Colors.electricIndigo : Colors.englishViolet },
+          ...{ backgroundColor: color === 'red' ? Colors.red : Colors.green },
         }}
       >
         {text}

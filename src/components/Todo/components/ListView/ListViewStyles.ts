@@ -6,15 +6,15 @@ export const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
   },
-  activeHeaderButton: { backgroundColor: Colors.electricIndigo },
   headerButton: {
     width: '50%',
     height: 40,
     justifyContent: 'center',
     borderBottomWidth: 2,
-    borderColor: Colors.englishViolet,
+    borderColor: Colors.orange,
   },
-  buttonText: { textAlign: 'center', color: Colors.seaSalt, fontSize: 20 },
+  activeHeaderButton: { backgroundColor: Colors.orange, color: Colors.bg },
+  buttonText: { textAlign: 'center', color: Colors.fg, fontSize: 20, fontWeight: 'bold' },
   taskContainer: {
     width: '80%',
     flexDirection: 'column',
