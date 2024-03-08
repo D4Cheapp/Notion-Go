@@ -12,15 +12,15 @@ export const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     borderBottomWidth: 2,
-    borderColor: Colors.englishViolet
+    borderColor: Colors.englishViolet,
   },
   buttonText: { textAlign: 'center', color: Colors.seaSalt, fontSize: 20 },
   taskContainer: {
-    width: '100%',
+    width: '80%',
     flexDirection: 'column',
     alignItems: 'flex-start',
     marginTop: 15,
-    paddingHorizontal: 30,
+    paddingLeft: '5%',
     gap: 20,
   },
 });

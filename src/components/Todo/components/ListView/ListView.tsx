@@ -38,7 +38,9 @@ function ListView({ tasks }: Props) {
       </View>
 
       <View style={styles.taskContainer}>
-        {listView === 'active' && tasks && tasks.map((task) => <Task key={task.id} task={task} />)}
+        {listView === 'active' &&
+          tasks &&
+          tasks.map((task) => !task.properties.Done.checkbox && <Task key={task.id} task={task} />)}
         {listView === 'journal' &&
           tasks &&
           tasks.map((task) => task.properties.Done.checkbox && <Task key={task.id} task={task} />)}

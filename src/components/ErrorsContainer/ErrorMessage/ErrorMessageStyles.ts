@@ -21,5 +21,6 @@ export const styles = StyleSheet.create({
   },
   closeButton: {
     height: 35,
+    width: 35,
   },
 });
