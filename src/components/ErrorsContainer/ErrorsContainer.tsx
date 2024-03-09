@@ -10,12 +10,12 @@ function ErrorsContainer() {
   const errors = useAppSelector(errorsSelector);
   const { closeError } = useActions();
 
-  const onCloseClick = useCallback((index: number) => closeError(index), [errors]);
+  const handleCloseClick = useCallback((index: number) => closeError(index), [errors]);
 
   return (
     <SafeAreaView style={styles.container}>
       {errors.map((error) => (
-        <ErrorMessage key={error.id} error={error} onCloseClick={onCloseClick} />
+        <ErrorMessage key={error.id} error={error} onCloseClick={handleCloseClick} />
       ))}
     </SafeAreaView>
   );

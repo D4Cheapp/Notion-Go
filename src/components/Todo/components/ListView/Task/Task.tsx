@@ -20,12 +20,12 @@ function Task({ task, index, onCheckClick, onTaskDeleteClick }: Props): React.Re
   const isPriorityExist = urgency.select !== null || importance.select !== null;
   const [isChecked, setIsChecked] = useState(task.properties.Done.checkbox);
 
-  const onCheckboxChange = (checked: boolean) => {
+  const handleCheckboxChange = (checked: boolean) => {
     setIsChecked(checked);
     onCheckClick(checked, index, task.id);
   };
 
-  const onTrashClick = () => {
+  const handleTrashClick = () => {
     if (onTaskDeleteClick) {
       onTaskDeleteClick(index, task.id);
     }
@@ -36,7 +36,7 @@ function Task({ task, index, onCheckClick, onTaskDeleteClick }: Props): React.Re
       <Checkbox
         style={styles.checkbox}
         color={isChecked ? Colors.orange : undefined}
-        onValueChange={onCheckboxChange}
+        onValueChange={handleCheckboxChange}
         value={isChecked}
       />
       <View style={styles.titleContainer}>
@@ -54,7 +54,7 @@ function Task({ task, index, onCheckClick, onTaskDeleteClick }: Props): React.Re
       </View>
       {isChecked && (
         <View>
-          <Pressable onPress={onTrashClick}>
+          <Pressable onPress={handleTrashClick}>
             <Image
               style={styles.trashImage}
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

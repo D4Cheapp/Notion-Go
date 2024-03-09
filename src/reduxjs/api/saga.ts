@@ -19,6 +19,20 @@ function* getAllTasksSaga(action: GetAllTasksActionType) {
       .query({
         database_id,
         page_size: page_size ? page_size : 100,
+        sorts: [
+          {
+            property: 'Importance',
+            direction: 'ascending',
+          },
+          {
+            property: 'Urgency',
+            direction: 'ascending',
+          },
+          {
+            property: 'Created time',
+            direction: 'ascending',
+          },
+        ],
       })
       //@ts-ignore
       .then((data) => data.results)

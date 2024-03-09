@@ -17,22 +17,22 @@ function ListView({ tasks }: Props) {
   const isJournal = listView === 'journal';
   const isActive = listView === 'active';
 
-  const onActiveListClick = () => {
+  const handleActiveListClick = () => {
     setListView('active');
   };
 
-  const onJournalListClick = () => {
+  const handleJournalListClick = () => {
     setListView('journal');
   };
 
-  const onCheckClick = (checked: boolean, index: number, id: string) => {
+  const handleCheckClick = (checked: boolean, index: number, id: string) => {
     if (client) {
       setCheckStatus({ client, task_id: id, checked });
       setTaskCheckStatus({ index, check: checked });
     }
   };
 
-  const onTaskDeleteClick = (index: number, id: string) => {
+  const handleTaskDeleteClick = (index: number, id: string) => {
     if (client) {
       deleteTask({ client, index, task_id: id });
     }
@@ -42,14 +42,14 @@ function ListView({ tasks }: Props) {
     <>
       <View style={styles.header}>
         <Pressable
-          onPress={onActiveListClick}
+          onPress={handleActiveListClick}
           style={[isActive && styles.activeHeaderButton, styles.headerButton]}
         >
           <Text style={[styles.buttonText, isActive && styles.activeHeaderButton]}>Active</Text>
         </Pressable>
 
         <Pressable
-          onPress={onJournalListClick}
+          onPress={handleJournalListClick}
           style={[isJournal && styles.activeHeaderButton, styles.headerButton]}
         >
           <Text style={[styles.buttonText, isJournal && styles.activeHeaderButton]}>Journal</Text>
@@ -62,7 +62,7 @@ function ListView({ tasks }: Props) {
           tasks.map(
             (task, index) =>
               !task.properties.Done.checkbox && (
-                <Task key={task.id} task={task} index={index} onCheckClick={onCheckClick} />
+                <Task key={task.id} task={task} index={index} onCheckClick={handleCheckClick} />
               ),
           )}
         {listView === 'journal' &&
@@ -74,8 +74,8 @@ function ListView({ tasks }: Props) {
                   key={task.id}
                   task={task}
                   index={index}
-                  onCheckClick={onCheckClick}
-                  onTaskDeleteClick={onTaskDeleteClick}
+                  onCheckClick={handleCheckClick}
+                  onTaskDeleteClick={handleTaskDeleteClick}
                 />
               ),
           )}

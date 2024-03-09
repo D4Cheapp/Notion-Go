@@ -13,13 +13,13 @@ function Header() {
   const { getClientInfo, setTaskView } = useActions();
   const taskView = useAppSelector(taskViewSelector);
 
-  const onAuthKeyInput = (data: string) => setAuthKey(data);
+  const handleAuthKeyInput = (data: string) => setAuthKey(data);
 
-  const onDatabaseIdInput = (data: string) => setDatabaseId(data);
+  const handleDatabaseIdInput = (data: string) => setDatabaseId(data);
 
-  const onOptionClick = () => setOptionModalWindow(true);
+  const handleOptionClick = () => setOptionModalWindow(true);
 
-  const onOptionSaveClick = useCallback(async () => {
+  const handleOptionSaveClick = useCallback(async () => {
     if (authKey) {
       await SecureStore.setItemAsync('auth_key', authKey);
     }
@@ -32,9 +32,9 @@ function Header() {
     setOptionModalWindow(false);
   }, [authKey, databaseId]);
 
-  const onOptionCloseClick = useCallback(() => setOptionModalWindow(false), []);
+  const handleOptionCloseClick = useCallback(() => setOptionModalWindow(false), []);
 
-  const onCalendarClick = () => setTaskView(taskView === 'calendar' ? 'list' : 'calendar');
+  const handleCalendarClick = () => setTaskView(taskView === 'calendar' ? 'list' : 'calendar');
 
   const loadAuthData = async () => {
     const databaseId = await SecureStore.getItemAsync('database_id');
@@ -51,7 +51,7 @@ function Header() {
 
   return (
     <View style={styles.header}>
-      <Pressable onPress={onCalendarClick}>
+      <Pressable onPress={handleCalendarClick}>
         <Image
           style={styles.taskViewImage}
           source={
@@ -68,14 +68,14 @@ function Header() {
           title="Notion api"
           isWindowActive={isOptionModalWindow}
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
-          action={onOptionSaveClick}
-          closeAction={onOptionCloseClick}
+          action={handleOptionSaveClick}
+          closeAction={handleOptionCloseClick}
         >
           <View style={styles.dataContentContainer}>
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Ключ интеграции notion</Text>
               <TextInput
-                onChangeText={onAuthKeyInput}
+                onChangeText={handleAuthKeyInput}
                 defaultValue={authKey}
                 style={styles.input}
               />
@@ -83,14 +83,14 @@ function Header() {
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>ID базы данных</Text>
               <TextInput
-                onChangeText={onDatabaseIdInput}
+                onChangeText={handleDatabaseIdInput}
                 defaultValue={databaseId}
                 style={styles.input}
               />
             </View>
           </View>
         </ModalWindow>
-        <Pressable onPress={onOptionClick}>
+        <Pressable onPress={handleOptionClick}>
           <Image
             style={styles.settingsImage}
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
