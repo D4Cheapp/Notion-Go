@@ -4,16 +4,16 @@ import { Colors } from '@/constants/theme';
 export const styles = StyleSheet.create({
   task: {
     width: '85%',
-    paddingHorizontal: '3%',
+    paddingHorizontal: '5%',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 20
+    gap: 20,
   },
   titleContainer: {
-    width: '90%'
+    width: '90%',
   },
   title: {
-    width: "100%",
+    width: '100%',
     fontSize: 22,
     color: Colors.fg,
     margin: 0,

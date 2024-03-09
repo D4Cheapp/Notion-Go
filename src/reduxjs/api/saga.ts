@@ -1,5 +1,6 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
 import { Client } from '@notionhq/client';
+import { TaskType } from 'src/types';
 import { apiActions } from './index';
 import { baseActions } from '../base';
 import {
@@ -13,9 +14,8 @@ function* getAllTasksSaga(action: GetAllTasksActionType) {
   yield put(baseActions.setIsLoading(true));
   const { client, database_id, page_size } = action.payload;
   try {
-    //@ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const tasks = yield client?.databases
+    const tasks: TaskType[] = yield client?.databases
       .query({
         database_id,
         page_size: page_size ? page_size : 100,
@@ -34,12 +34,10 @@ function* getAllTasksSaga(action: GetAllTasksActionType) {
           },
         ],
       })
-      //@ts-ignore
       .then((data) => data.results)
       .catch((error) => {
         throw error;
       });
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     yield put(apiActions.setAllTasks(tasks));
   } catch (error: unknown) {
     const errors = error as Error;

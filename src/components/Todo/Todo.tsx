@@ -23,7 +23,7 @@ function Todo() {
       Animated.loop(
         Animated.timing(loadingAnimation, {
           toValue: 2,
-          duration: 3000,
+          duration: 1500,
           easing: Easing.linear,
           useNativeDriver: true,
         }),

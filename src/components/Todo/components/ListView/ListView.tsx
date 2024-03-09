@@ -1,10 +1,10 @@
-import { Text, Pressable, View } from 'react-native';
-import React, { useState } from 'react';
+import { Text, Pressable, View, ScrollView, RefreshControl } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { TaskType } from 'src/types';
 import Task from './Task';
 import { styles } from './ListViewStyles';
 import { useActions, useAppSelector } from '@/hooks/reduxHooks';
-import { clientSelector } from '@/reduxjs/api/selectors';
+import { clientSelector, databaseIdSelector } from '@/reduxjs/api/selectors';
 
 interface Props {
   tasks: TaskType[];
@@ -12,8 +12,10 @@ interface Props {
 
 function ListView({ tasks }: Props) {
   const [listView, setListView] = useState<'active' | 'journal'>('active');
+  const [refreshing, setRefreshing] = useState(false);
   const client = useAppSelector(clientSelector);
-  const { setCheckStatus, setTaskCheckStatus, deleteTask } = useActions();
+  const database_id = useAppSelector(databaseIdSelector);
+  const { getAllTasks, setCheckStatus, setTaskCheckStatus, deleteTask } = useActions();
   const isJournal = listView === 'journal';
   const isActive = listView === 'active';
 
@@ -38,6 +40,20 @@ function ListView({ tasks }: Props) {
     }
   };
 
+  const handleRefresh = () => {
+    setRefreshing(true);
+    const isReadyToFetch = client && database_id;
+    if (isReadyToFetch) {
+      getAllTasks({ client, database_id });
+    } else {
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    setRefreshing(false);
+  }, [tasks]);
+
   return (
     <>
       <View style={styles.header}>
@@ -56,7 +72,10 @@ function ListView({ tasks }: Props) {
         </Pressable>
       </View>
 
-      <View style={styles.taskContainer}>
+      <ScrollView
+        contentContainerStyle={styles.taskContainer}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
+      >
         {listView === 'active' &&
           tasks &&
           tasks.map(
@@ -79,7 +98,7 @@ function ListView({ tasks }: Props) {
                 />
               ),
           )}
-      </View>
+      </ScrollView>
     </>
   );
 }

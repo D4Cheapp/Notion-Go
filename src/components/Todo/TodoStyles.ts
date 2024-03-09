@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
   loadingCircle: {
     width: 100,
     height: 100,
-    borderWidth: 5,
+    borderWidth: 6,
     borderLeftColor: Colors.fg,
     borderRightColor: Colors.fg,
     borderBottomColor: Colors.fg,
