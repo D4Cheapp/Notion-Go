@@ -6,7 +6,7 @@ import { styles } from './ErrorsContainerStyles';
 import ErrorMessage from './ErrorMessage';
 import { useActions, useAppSelector } from '@/hooks/reduxHooks';
 
-function ErrorsContainer() {
+const ErrorsContainer = (): React.ReactNode => {
   const errors = useAppSelector(errorsSelector);
   const { closeError } = useActions();
 
@@ -19,6 +19,6 @@ function ErrorsContainer() {
       ))}
     </SafeAreaView>
   );
-}
+};
 
 export default ErrorsContainer;

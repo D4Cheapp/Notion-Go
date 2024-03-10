@@ -6,7 +6,7 @@ import { styles } from './HeaderStyles';
 import ModalWindow from '@/components/ModalWindow';
 import { useActions, useAppSelector } from '@/hooks/reduxHooks';
 
-function Header() {
+const Header = (): React.ReactNode => {
   const [isOptionModalWindow, setOptionModalWindow] = useState(false);
   const [authKey, setAuthKey] = useState<string>();
   const [databaseId, setDatabaseId] = useState<string>();
@@ -100,6 +100,6 @@ function Header() {
       </View>
     </View>
   );
-}
+};
 
 export default Header;

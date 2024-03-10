@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Animated, Easing, View } from 'react-native';
 import { isLoadingSelector, taskViewSelector } from 'src/reduxjs/base/selectors';
 import { tasksSelector } from 'src/reduxjs/api/selectors';
@@ -7,7 +7,7 @@ import CalendarView from './components/CalendarView';
 import { styles } from './TodoStyles';
 import { useAppSelector } from '@/hooks/reduxHooks';
 
-function Todo() {
+const Todo = (): React.ReactNode => {
   const loadingAnimation = useRef(new Animated.Value(0)).current;
   const taskView = useAppSelector(taskViewSelector);
   const tasks = useAppSelector(tasksSelector);
@@ -23,7 +23,7 @@ function Todo() {
       Animated.loop(
         Animated.timing(loadingAnimation, {
           toValue: 2,
-          duration: 1500,
+          duration: 2000,
           easing: Easing.linear,
           useNativeDriver: true,
         }),
@@ -45,6 +45,6 @@ function Todo() {
       )}
     </View>
   );
-}
+};
 
 export default Todo;

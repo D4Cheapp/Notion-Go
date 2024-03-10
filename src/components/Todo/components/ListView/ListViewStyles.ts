@@ -16,8 +16,6 @@ export const styles = StyleSheet.create({
   activeHeaderButton: { backgroundColor: Colors.orange, color: Colors.bg },
   buttonText: { textAlign: 'center', color: Colors.fg, fontSize: 20, fontWeight: 'bold' },
   taskContainer: {
-    marginTop: 15,
     paddingBottom: 30,
-    gap: 20,
   },
 });

@@ -21,6 +21,10 @@ function* getAllTasksSaga(action: GetAllTasksActionType) {
         page_size: page_size ? page_size : 100,
         sorts: [
           {
+            property: 'Date',
+            direction: 'ascending',
+          },
+          {
             property: 'Importance',
             direction: 'ascending',
           },

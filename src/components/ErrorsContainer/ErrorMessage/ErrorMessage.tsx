@@ -8,7 +8,7 @@ interface Props {
   onCloseClick: (index: number) => void;
 }
 
-function ErrorMessage({ error, onCloseClick }: Props): React.ReactNode {
+const ErrorMessage = ({ error, onCloseClick }: Props): React.ReactNode => {
   useEffect(() => {
     const closeTimeout = setTimeout(() => onCloseClick(error.id), 4000);
     return () => clearTimeout(closeTimeout);
@@ -26,6 +26,6 @@ function ErrorMessage({ error, onCloseClick }: Props): React.ReactNode {
       </Pressable>
     </View>
   );
-}
+};
 
 export default ErrorMessage;

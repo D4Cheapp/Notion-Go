@@ -1,5 +1,5 @@
 import { Text, Pressable, View, ScrollView, RefreshControl } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useState } from 'react';
 import { TaskType } from 'src/types';
 import Task from './Task';
 import { styles } from './ListViewStyles';
@@ -10,7 +10,7 @@ interface Props {
   tasks: TaskType[];
 }
 
-function ListView({ tasks }: Props) {
+const ListView = ({ tasks }: Props): React.ReactNode => {
   const [listView, setListView] = useState<'active' | 'journal'>('active');
   const [refreshing, setRefreshing] = useState(false);
   const client = useAppSelector(clientSelector);
@@ -44,15 +44,12 @@ function ListView({ tasks }: Props) {
     setRefreshing(true);
     const isReadyToFetch = client && database_id;
     if (isReadyToFetch) {
+      setRefreshing(false);
       getAllTasks({ client, database_id });
     } else {
       setRefreshing(false);
     }
   };
-
-  useEffect(() => {
-    setRefreshing(false);
-  }, [tasks]);
 
   return (
     <>
@@ -101,6 +98,6 @@ function ListView({ tasks }: Props) {
       </ScrollView>
     </>
   );
-}
+};
 
 export default ListView;

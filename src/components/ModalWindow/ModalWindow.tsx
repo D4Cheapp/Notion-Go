@@ -9,7 +9,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-function ModalWindow({ title, isWindowActive, action, closeAction, children }: Props) {
+const ModalWindow = ({ title, isWindowActive, action, closeAction, children }: Props): React.ReactNode => {
   return (
     <Modal animationType="fade" transparent visible={isWindowActive}>
       <View style={styles.background}>
@@ -31,6 +31,6 @@ function ModalWindow({ title, isWindowActive, action, closeAction, children }: P
       </View>
     </Modal>
   );
-}
+};
 
 export default ModalWindow;

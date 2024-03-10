@@ -6,7 +6,7 @@ interface Props {
   tasks: TaskType[];
 }
 
-function CalendarView({ tasks }: Props) {
+const CalendarView = ({ tasks }: Props): React.ReactNode => {
   tasks;
 
   return (
@@ -14,6 +14,6 @@ function CalendarView({ tasks }: Props) {
       <Text>TodoCalendar</Text>
     </View>
   );
-}
+};
 
 export default CalendarView;
