@@ -16,7 +16,7 @@ const ErrorMessage = ({ error, onCloseClick }: Props): React.ReactNode => {
 
   return (
     <View style={styles.errorContainer}>
-      <Text style={[styles.text, styles.text]}>Ошибка: {error.message}</Text>
+      <Text style={[styles.text, styles.text]}>Error: {error.message}</Text>
       <Pressable onPress={() => onCloseClick(error.id)}>
         <Image
           style={styles.closeButton}

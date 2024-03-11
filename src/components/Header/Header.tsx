@@ -73,7 +73,7 @@ const Header = (): React.ReactNode => {
         >
           <View style={styles.dataContentContainer}>
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Ключ интеграции notion</Text>
+              <Text style={styles.inputLabel}>Notion api key</Text>
               <TextInput
                 onChangeText={handleAuthKeyInput}
                 defaultValue={authKey}
@@ -81,7 +81,7 @@ const Header = (): React.ReactNode => {
               />
             </View>
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>ID базы данных</Text>
+              <Text style={styles.inputLabel}>Database id</Text>
               <TextInput
                 onChangeText={handleDatabaseIdInput}
                 defaultValue={databaseId}

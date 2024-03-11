@@ -1,21 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice } from '@reduxjs/toolkit';
 import { Client } from '@notionhq/client';
-import { TaskType } from 'src/types';
+import { BlockType, TaskType } from 'src/types';
 import {
   DeleteTaskActionType,
   GetAllTasksActionType,
   GetClientInfoActionType,
+  GetTaskContentActionType,
   SetAllTasksActionType,
   SetCheckStatusActionType,
   SetClientInfoActionType,
   SetTaskCheckStatusActionType,
+  SetTaskContentActionType,
 } from './types';
 
 interface SliceInterface {
   client: Client | null;
   database_id: string | null;
   tasks: TaskType[];
+  taskContent: BlockType[];
 }
 
 const apiSlice = createSlice({
@@ -28,6 +31,12 @@ const apiSlice = createSlice({
 
     setAllTasks: (state, action: SetAllTasksActionType) => {
       state.tasks = action.payload;
+    },
+
+    getTaskContent: (state, action: GetTaskContentActionType) => state,
+
+    setTaskContent: (state, action: SetTaskContentActionType) => {
+      state.taskContent = action.payload;
     },
 
     deleteTask: (state, action: DeleteTaskActionType) => {

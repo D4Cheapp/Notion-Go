@@ -1,10 +1,10 @@
 import { Text, Pressable, View, ScrollView, RefreshControl } from 'react-native';
-import React, {useState } from 'react';
+import React, { useState } from 'react';
 import { TaskType } from 'src/types';
 import Task from './Task';
 import { styles } from './ListViewStyles';
 import { useActions, useAppSelector } from '@/hooks/reduxHooks';
-import { clientSelector, databaseIdSelector } from '@/reduxjs/api/selectors';
+import { clientSelector, databaseIdSelector, taskContentSelector } from '@/reduxjs/api/selectors';
 
 interface Props {
   tasks: TaskType[];
@@ -15,7 +15,9 @@ const ListView = ({ tasks }: Props): React.ReactNode => {
   const [refreshing, setRefreshing] = useState(false);
   const client = useAppSelector(clientSelector);
   const database_id = useAppSelector(databaseIdSelector);
-  const { getAllTasks, setCheckStatus, setTaskCheckStatus, deleteTask } = useActions();
+  const taskContent = useAppSelector(taskContentSelector);
+  const { getAllTasks, getTaskContent, setCheckStatus, setTaskCheckStatus, deleteTask } =
+    useActions();
   const isJournal = listView === 'journal';
   const isActive = listView === 'active';
 
@@ -51,6 +53,10 @@ const ListView = ({ tasks }: Props): React.ReactNode => {
     }
   };
 
+  const handleTaskClick = (id: string) => {
+    getTaskContent({ client, task_id: id });
+  };
+
   return (
     <>
       <View style={styles.header}>
@@ -78,7 +84,14 @@ const ListView = ({ tasks }: Props): React.ReactNode => {
           tasks.map(
             (task, index) =>
               !task.properties.Done.checkbox && (
-                <Task key={task.id} task={task} index={index} onCheckClick={handleCheckClick} />
+                <Task
+                  key={task.id}
+                  task={task}
+                  index={index}
+                  taskContent={taskContent}
+                  onTaskClick={handleTaskClick}
+                  onCheckClick={handleCheckClick}
+                />
               ),
           )}
         {listView === 'journal' &&
@@ -90,7 +103,9 @@ const ListView = ({ tasks }: Props): React.ReactNode => {
                   key={task.id}
                   task={task}
                   index={index}
+                  taskContent={taskContent}
                   onCheckClick={handleCheckClick}
+                  onTaskClick={handleTaskClick}
                   onTaskDeleteClick={handleTaskDeleteClick}
                 />
               ),

@@ -54,12 +54,16 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 5,
   },
+  icon: {
+    width: 30,
+    height: 30,
+  },
   confirmButton: {
-backgroundColor: Colors.green,
-   },
-   exitButton: {
+    backgroundColor: Colors.green,
+  },
+  exitButton: {
     backgroundColor: Colors.red,
-   },
+  },
   buttonText: {
     fontSize: 20,
     fontWeight: 'bold',

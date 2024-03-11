@@ -1,5 +1,22 @@
 export type TaskType = {
   archived: boolean;
+  icon:
+    | {
+        emoji: 'string';
+        type: 'emoji';
+      }
+    | {
+        external: {
+          url: string;
+        };
+        type: 'external';
+      }
+    | {
+        file: {
+          url: string;
+        };
+        type: 'file';
+      };
   created_by: {
     id: string;
     object: string;
@@ -63,4 +80,24 @@ export type TaskType = {
     };
     Done: { checkbox: boolean; id: string; type: 'checkbox' };
   };
+};
+export type BlockType = {
+  blockId: string;
+  children: [unknown];
+  parent: string;
+  type:
+    | 'to_do'
+    | 'paragraph'
+    | 'heading_1'
+    | 'heading_2'
+    | 'heading_3'
+    | 'table'
+    | 'bulleted_list_item'
+    | 'numbered_list_item'
+    | 'toggle'
+    | 'divider'
+    | 'quote'
+    | 'callout'
+    | 'image'
+    | 'column_list';
 };

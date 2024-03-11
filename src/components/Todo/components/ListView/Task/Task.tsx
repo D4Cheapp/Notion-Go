@@ -1,32 +1,48 @@
 import React, { useState } from 'react';
 import { Image, Pressable, Text, View } from 'react-native';
-import { TaskType } from 'src/types';
+import { BlockType, TaskType } from 'src/types';
 import Checkbox from 'expo-checkbox';
+import Property from './components/Property';
+import TaskForm from './components/TaskForm';
+import DateProperty from './components/DateProperty';
 import { styles } from './TaskStyles';
-import Property from './Property';
 import { Colors } from '@/constants/theme';
-
-const dateFormatter = (date: string): string => {
-  let resultDateString = date[5] + date[6] + '/' + date[8] + date[9];
-  if (date.includes('T')) {
-    resultDateString += ' ' + date[11] + date[12] + ':' + date[14] + date[15];
-  }
-  return resultDateString;
-};
+import ModalWindow from '@/components/ModalWindow';
 
 interface Props {
   task: TaskType;
   index: number;
+  taskContent: BlockType[] | undefined;
   onCheckClick: (checked: boolean, index: number, id: string) => void;
+  onTaskClick: (id: string) => void;
   onTaskDeleteClick?: (index: number, id: string) => void;
 }
 
-const Task = ({ task, index, onCheckClick, onTaskDeleteClick }: Props): React.ReactNode => {
+const Task = ({
+  task,
+  taskContent,
+  index,
+  onCheckClick,
+  onTaskClick,
+  onTaskDeleteClick,
+}: Props): React.ReactNode => {
   const [isChecked, setIsChecked] = useState(task.properties.Done.checkbox);
+  const [isContentShown, setIsContentShown] = useState(false);
   const title = task.properties.Name.title[0].plain_text;
+  const icon = task.icon;
+  const iconUri =
+    icon !== null
+      ? icon.type === 'external'
+        ? icon.external.url
+        : icon.type !== 'emoji'
+          ? icon.file.url
+          : ''
+      : '';
   const urgency = task.properties.Urgency;
   const importance = task.properties.Importance;
   const dueDate = task.properties.Date?.date;
+  const isImportant = importance.select !== null;
+  const isUrgent = urgency.select !== null;
   const isPriorityExist = urgency.select !== null || importance.select !== null;
   const isDateExist = dueDate !== null;
 
@@ -41,6 +57,15 @@ const Task = ({ task, index, onCheckClick, onTaskDeleteClick }: Props): React.Re
     }
   };
 
+  const handleTaskPress = () => {
+    setIsContentShown(true);
+    onTaskClick(task.id);
+  };
+
+  const handleContentClose = () => {
+    setIsContentShown(false);
+  };
+
   return (
     <>
       <View style={styles.task}>
@@ -50,8 +75,19 @@ const Task = ({ task, index, onCheckClick, onTaskDeleteClick }: Props): React.Re
           onValueChange={handleCheckboxChange}
           value={isChecked}
         />
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>{title}</Text>
+        <Pressable onPress={handleTaskPress} style={styles.titleContainer}>
+          <Text style={styles.title}>
+            {icon !== null &&
+              (icon.type === 'emoji' ? (
+                icon.emoji + ' '
+              ) : (
+                <>
+                  <Image style={styles.icon} source={{ uri: iconUri }} />
+                  <Text> </Text>
+                </>
+              ))}
+            {title}
+          </Text>
           {isDateExist && (
             <View style={styles.dateContainer}>
               <Image
@@ -61,22 +97,22 @@ const Task = ({ task, index, onCheckClick, onTaskDeleteClick }: Props): React.Re
                   require('../../../../../assets/images/calendar.png')
                 }
               />
-              {dueDate?.start && <Text style={styles.date}>{dateFormatter(dueDate.start)}</Text>}
-              {dueDate?.end && dueDate?.start && <Text style={styles.date}>{' / '}</Text>}
-              {dueDate?.end && <Text style={styles.date}>{dateFormatter(dueDate.end)}</Text>}
+              <DateProperty dueDate={dueDate} />
             </View>
           )}
           {isPriorityExist && (
             <View style={styles.priorityContainer}>
-              {urgency.select !== null && (
+              {isUrgent && (
+                //@ts-ignore
                 <Property text={urgency.select.name} color={urgency.select.color} />
               )}
-              {importance.select !== null && (
+              {isImportant && (
+                //@ts-ignore
                 <Property text={importance.select.name} color={importance.select.color} />
               )}
             </View>
           )}
-        </View>
+        </Pressable>
         {isChecked && (
           <View>
             <Pressable onPress={handleTrashClick}>
@@ -89,6 +125,20 @@ const Task = ({ task, index, onCheckClick, onTaskDeleteClick }: Props): React.Re
           </View>
         )}
       </View>
+      <ModalWindow
+        closeAction={handleContentClose}
+        isWindowActive={isContentShown}
+        title={title}
+        icon={icon}
+      >
+        <TaskForm
+          dueDate={dueDate}
+          taskContent={taskContent}
+          isImportant={isImportant}
+          isUrgent={isUrgent}
+          onTrashClick={handleTrashClick}
+        />
+      </ModalWindow>
       <View style={styles.divider} />
     </>
   );

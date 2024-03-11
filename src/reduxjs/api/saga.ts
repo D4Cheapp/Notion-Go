@@ -1,11 +1,13 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
 import { Client } from '@notionhq/client';
-import { TaskType } from 'src/types';
+import { NotionToMarkdown } from 'notion-to-md';
+import { BlockType, TaskType } from 'src/types';
 import { apiActions } from './index';
 import { baseActions } from '../base';
 import {
   DeleteTaskActionType,
   GetAllTasksActionType,
+  GetTaskContentActionType,
   SetCheckStatusActionType,
   SetClientInfoActionType,
 } from './types';
@@ -60,6 +62,16 @@ function* deleteTaskSaga(action: DeleteTaskActionType) {
   }
 }
 
+function* getTaskContentSaga(action: GetTaskContentActionType) {
+  const { client, task_id } = action.payload;
+  if (client) {
+    const n2m = new NotionToMarkdown({ notionClient: client });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const mdBlocks: BlockType[] = yield call(() => n2m.pageToMarkdown(task_id));
+    yield put(apiActions.setTaskContent(mdBlocks))
+  }
+}
+
 function* setCheckStatusSaga(action: SetCheckStatusActionType) {
   const { client, task_id, checked } = action.payload;
   try {
@@ -91,6 +103,7 @@ function* getClientInfoSaga(action: SetClientInfoActionType) {
 export function* apiSaga() {
   yield all([
     takeEvery(apiActions.getAllTasks, getAllTasksSaga),
+    takeEvery(apiActions.getTaskContent, getTaskContentSaga),
     takeEvery(apiActions.deleteTask, deleteTaskSaga),
     takeEvery(apiActions.setCheckStatus, setCheckStatusSaga),
     takeEvery(apiActions.getClientInfo, getClientInfoSaga),

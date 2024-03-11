@@ -20,6 +20,10 @@ export const styles = StyleSheet.create({
     width: '90%',
     gap: 10,
   },
+  icon: {
+    width: 25,
+    height: 25,
+  },
   title: {
     width: '100%',
     fontSize: 22,
@@ -43,11 +47,6 @@ export const styles = StyleSheet.create({
     width: 20,
     height: 20,
     tintColor: Colors.orange,
-  },
-  date: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: Colors.fg,
   },
   trashImage: { width: 30, height: 30 },
   priorityContainer: {
