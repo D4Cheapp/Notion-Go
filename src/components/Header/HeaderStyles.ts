@@ -34,6 +34,7 @@ export const styles = StyleSheet.create({
   inputLabel: {
     color: Colors.fg,
     fontSize: 20,
+    fontWeight: '600',
     textAlign: 'left',
   },
   input: {

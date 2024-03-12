@@ -81,23 +81,36 @@ export type TaskType = {
     Done: { checkbox: boolean; id: string; type: 'checkbox' };
   };
 };
-export type BlockType = {
-  blockId: string;
-  children: [unknown];
-  parent: string;
-  type:
-    | 'to_do'
-    | 'paragraph'
-    | 'heading_1'
-    | 'heading_2'
-    | 'heading_3'
-    | 'table'
-    | 'bulleted_list_item'
-    | 'numbered_list_item'
-    | 'toggle'
-    | 'divider'
-    | 'quote'
-    | 'callout'
-    | 'image'
-    | 'column_list';
-};
+export type BlockType =
+  | {
+      blockId: string;
+      children: [unknown];
+      parent: string;
+      type:
+        | 'to_do'
+        | 'table'
+        | 'bulleted_list_item'
+        | 'numbered_list_item'
+        | 'toggle'
+        | 'divider'
+        | 'quote'
+        | 'callout'
+        | 'image'
+        | 'column_list';
+    }
+  | {
+      blockId: string;
+      children: [];
+      parent: string;
+      type: 'paragraph';
+    }
+  | {
+      blockId: string;
+      children: {
+        blockId: string;
+        parent: string;
+        type: 'paragraph';
+      }[];
+      parent: string;
+      type: 'heading_1' | 'heading_2' | 'heading_3';
+    };

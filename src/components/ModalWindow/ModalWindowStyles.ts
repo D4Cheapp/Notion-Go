@@ -30,6 +30,7 @@ export const styles = StyleSheet.create({
     borderColor: Colors.fg,
     borderStyle: 'solid',
     width: '85%',
+    maxHeight: '90%',
     padding: 30,
     gap: 15,
     flexDirection: 'column',

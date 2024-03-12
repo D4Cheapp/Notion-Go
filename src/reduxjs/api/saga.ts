@@ -13,7 +13,7 @@ import {
 } from './types';
 
 function* getAllTasksSaga(action: GetAllTasksActionType) {
-  yield put(baseActions.setIsLoading(true));
+  yield put(baseActions.setIsTasksLoading(true));
   const { client, database_id, page_size } = action.payload;
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -49,7 +49,7 @@ function* getAllTasksSaga(action: GetAllTasksActionType) {
     const errors = error as Error;
     yield put(baseActions.setError(errors.message));
   }
-  yield put(baseActions.setIsLoading(false));
+  yield put(baseActions.setIsTasksLoading(false));
 }
 
 function* deleteTaskSaga(action: DeleteTaskActionType) {
@@ -63,13 +63,15 @@ function* deleteTaskSaga(action: DeleteTaskActionType) {
 }
 
 function* getTaskContentSaga(action: GetTaskContentActionType) {
+  yield put(baseActions.setIsTaskContentLoading(true));
   const { client, task_id } = action.payload;
   if (client) {
     const n2m = new NotionToMarkdown({ notionClient: client });
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const mdBlocks: BlockType[] = yield call(() => n2m.pageToMarkdown(task_id));
-    yield put(apiActions.setTaskContent(mdBlocks))
+    yield put(apiActions.setTaskContent(mdBlocks));
   }
+  yield put(baseActions.setIsTaskContentLoading(false));
 }
 
 function* setCheckStatusSaga(action: SetCheckStatusActionType) {
@@ -83,7 +85,7 @@ function* setCheckStatusSaga(action: SetCheckStatusActionType) {
 }
 
 function* getClientInfoSaga(action: SetClientInfoActionType) {
-  yield put(baseActions.setIsLoading(true));
+  yield put(baseActions.setIsTasksLoading(true));
   const { auth_key, database_id } = action.payload;
   const isClientCanFetch = auth_key && database_id;
   if (isClientCanFetch) {
@@ -97,7 +99,7 @@ function* getClientInfoSaga(action: SetClientInfoActionType) {
   } else {
     yield put(apiActions.setClientInfo(null));
   }
-  yield put(baseActions.setIsLoading(false));
+  yield put(baseActions.setIsTasksLoading(false));
 }
 
 export function* apiSaga() {

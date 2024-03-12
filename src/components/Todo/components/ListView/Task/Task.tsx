@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Image, Pressable, Text, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Animated, Easing, Image, Pressable, Text, View } from 'react-native';
 import { BlockType, TaskType } from 'src/types';
 import Checkbox from 'expo-checkbox';
 import Property from './components/Property';
@@ -28,6 +28,7 @@ const Task = ({
 }: Props): React.ReactNode => {
   const [isChecked, setIsChecked] = useState(task.properties.Done.checkbox);
   const [isContentShown, setIsContentShown] = useState(false);
+  const taskAnimationRef = useRef(new Animated.Value(0)).current;
   const title = task.properties.Name.title[0].plain_text;
   const icon = task.icon;
   const iconUri =
@@ -46,14 +47,35 @@ const Task = ({
   const isPriorityExist = urgency.select !== null || importance.select !== null;
   const isDateExist = dueDate !== null;
 
+  const translateAnimation = taskAnimationRef.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 5],
+  });
+
   const handleCheckboxChange = (checked: boolean) => {
     setIsChecked(checked);
-    onCheckClick(checked, index, task.id);
+    Animated.timing(taskAnimationRef, {
+      toValue: 100,
+      duration: 500,
+      easing: Easing.bounce,
+      useNativeDriver: true,
+    }).start();
+    setTimeout(() => {
+      onCheckClick(checked, index, task.id);
+    }, 500);
   };
 
   const handleTrashClick = () => {
     if (onTaskDeleteClick) {
-      onTaskDeleteClick(index, task.id);
+      Animated.timing(taskAnimationRef, {
+        toValue: 100,
+        duration: 500,
+        easing: Easing.bounce,
+        useNativeDriver: true,
+      }).start();
+      setTimeout(() => {
+        onTaskDeleteClick(index, task.id);
+      }, 500);
     }
   };
 
@@ -68,7 +90,12 @@ const Task = ({
 
   return (
     <>
-      <View style={styles.task}>
+      <Animated.View
+        style={{
+          ...styles.task,
+          transform: [{ translateX: translateAnimation }],
+        }}
+      >
         <Checkbox
           style={styles.checkbox}
           color={isChecked ? Colors.orange : undefined}
@@ -124,7 +151,7 @@ const Task = ({
             </Pressable>
           </View>
         )}
-      </View>
+      </Animated.View>
       <ModalWindow
         closeAction={handleContentClose}
         isWindowActive={isContentShown}

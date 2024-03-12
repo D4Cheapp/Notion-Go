@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { Colors } from '@/constants/theme';
 
 export const styles = StyleSheet.create({
-  todoContainer: {
+    todoContainer: {
     flex: 1
   },
   loadingContainer: {
@@ -11,8 +11,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   loadingCircle: {
-    width: 100,
-    height: 100,
+
     borderWidth: 6,
     borderLeftColor: Colors.fg,
     borderRightColor: Colors.fg,

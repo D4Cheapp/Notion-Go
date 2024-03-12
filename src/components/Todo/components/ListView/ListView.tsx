@@ -5,6 +5,7 @@ import Task from './Task';
 import { styles } from './ListViewStyles';
 import { useActions, useAppSelector } from '@/hooks/reduxHooks';
 import { clientSelector, databaseIdSelector, taskContentSelector } from '@/reduxjs/api/selectors';
+import { Colors } from '@/constants/theme';
 
 interface Props {
   tasks: TaskType[];
@@ -66,7 +67,6 @@ const ListView = ({ tasks }: Props): React.ReactNode => {
         >
           <Text style={[styles.buttonText, isActive && styles.activeHeaderButton]}>Active</Text>
         </Pressable>
-
         <Pressable
           onPress={handleJournalListClick}
           style={[isJournal && styles.activeHeaderButton, styles.headerButton]}
@@ -74,10 +74,16 @@ const ListView = ({ tasks }: Props): React.ReactNode => {
           <Text style={[styles.buttonText, isJournal && styles.activeHeaderButton]}>Journal</Text>
         </Pressable>
       </View>
-
       <ScrollView
         contentContainerStyle={styles.taskContainer}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
+        refreshControl={
+          <RefreshControl
+            progressBackgroundColor={Colors.fg}
+            colors={[Colors.orange]}
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+          />
+        }
       >
         {listView === 'active' &&
           tasks &&

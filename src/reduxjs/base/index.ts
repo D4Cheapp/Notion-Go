@@ -10,12 +10,18 @@ import {
 interface SliceInterface {
   errors: ErrorMessageType[];
   taskView: 'calendar' | 'list';
-  isLoading: boolean;
+  isTasksLoading: boolean;
+  isTaskContentLoading: boolean;
 }
 
 const baseSlice = createSlice({
   name: 'baseSlice',
-  initialState: { errors: [], taskView: 'list', isLoading: false } as SliceInterface,
+  initialState: {
+    errors: [],
+    taskView: 'list',
+    isTasksLoading: false,
+    isTaskContentLoading: false,
+  } as SliceInterface,
   reducers: {
     setError: (state, action: SetErrorActionType) => {
       const stateErrors = state.errors;
@@ -31,8 +37,13 @@ const baseSlice = createSlice({
       state.taskView = action.payload;
     },
 
-    setIsLoading: (state, action: SetIsLoadingActionType) => {
-      state.isLoading = action.payload;
+    setIsTasksLoading: (state, action: SetIsLoadingActionType) => {
+      state.isTasksLoading = action.payload;
+    },
+
+    
+    setIsTaskContentLoading: (state, action: SetIsLoadingActionType) => {
+      state.isTaskContentLoading = action.payload;
     },
   },
 });

@@ -4,4 +4,5 @@ import { RootStateType } from '..';
 const selector = (state: RootStateType) => state.base;
 export const errorsSelector = createSelector(selector, (state) => state.errors);
 export const taskViewSelector = createSelector(selector, (state) => state.taskView);
-export const isLoadingSelector = createSelector(selector, (state) => state.isLoading);
+export const isTasksLoadingSelector = createSelector(selector, (state) => state.isTasksLoading);
+export const isTaskContentLoadingSelector = createSelector(selector, (state) => state.isTaskContentLoading);

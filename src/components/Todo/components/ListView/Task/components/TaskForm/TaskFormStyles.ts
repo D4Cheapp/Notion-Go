@@ -25,4 +25,26 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.fg,
   },
+  contentContainer: {
+    width: '100%',
+  },
+  paragraph: {
+    color: Colors.fg,
+    fontSize: 17,
+  },
+  headerOne: {
+    fontSize: 22,
+    fontWeight: '600',
+    color: Colors.fg,
+  },
+  headerTwo: {
+    fontSize: 21,
+    fontWeight: '600',
+    color: Colors.fg,
+  },
+  headerThree: {
+        fontSize: 20,
+    fontWeight: '600',
+    color: Colors.fg,
+  },
 });
