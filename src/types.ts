@@ -84,33 +84,44 @@ export type TaskType = {
 export type BlockType =
   | {
       blockId: string;
-      children: [unknown];
+      children: { blockId: string; parent: string; type: 'table_row' }[];
       parent: string;
-      type:
-        | 'to_do'
-        | 'table'
-        | 'bulleted_list_item'
-        | 'numbered_list_item'
-        | 'toggle'
-        | 'divider'
-        | 'quote'
-        | 'callout'
-        | 'image'
-        | 'column_list';
+      type: 'table';
+    }
+  | {
+      blockId: string;
+      children: BlockType[];
+      parent: string;
+      type: 'column_list';
+    }
+  | {
+      blockId: string;
+      children: BlockType[];
+      parent: string;
+      type: 'column';
     }
   | {
       blockId: string;
       children: [];
       parent: string;
-      type: 'paragraph';
+      type: 'divider';
     }
   | {
       blockId: string;
-      children: {
-        blockId: string;
-        parent: string;
-        type: 'paragraph';
-      }[];
+      children: [];
       parent: string;
-      type: 'heading_1' | 'heading_2' | 'heading_3';
+      type: 'to_do' | 'quote' | 'callout';
+    }
+  | {
+      blockId: string;
+      children: BlockType[];
+      parent: string;
+      type:
+        | 'heading_1'
+        | 'heading_2'
+        | 'heading_3'
+        | 'bulleted_list_item'
+        | 'numbered_list_item'
+        | 'paragraph'
+        | 'toggle';
     };

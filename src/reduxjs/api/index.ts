@@ -18,7 +18,7 @@ interface SliceInterface {
   client: Client | null;
   database_id: string | null;
   tasks: TaskType[];
-  taskContent: BlockType[];
+  taskContent: BlockType[] | null;
 }
 
 const apiSlice = createSlice({

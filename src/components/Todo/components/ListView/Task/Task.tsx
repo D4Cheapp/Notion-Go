@@ -8,11 +8,12 @@ import DateProperty from './components/DateProperty';
 import { styles } from './TaskStyles';
 import { Colors } from '@/constants/theme';
 import ModalWindow from '@/components/ModalWindow';
+import { useActions } from '@/hooks/reduxHooks';
 
 interface Props {
   task: TaskType;
   index: number;
-  taskContent: BlockType[] | undefined;
+  taskContent: BlockType[] | null | undefined;
   onCheckClick: (checked: boolean, index: number, id: string) => void;
   onTaskClick: (id: string) => void;
   onTaskDeleteClick?: (index: number, id: string) => void;
@@ -28,6 +29,7 @@ const Task = ({
 }: Props): React.ReactNode => {
   const [isChecked, setIsChecked] = useState(task.properties.Done.checkbox);
   const [isContentShown, setIsContentShown] = useState(false);
+  const { setTaskContent } = useActions();
   const taskAnimationRef = useRef(new Animated.Value(0)).current;
   const title = task.properties.Name.title[0].plain_text;
   const icon = task.icon;
@@ -86,6 +88,7 @@ const Task = ({
 
   const handleContentClose = () => {
     setIsContentShown(false);
+    setTaskContent(null);
   };
 
   return (

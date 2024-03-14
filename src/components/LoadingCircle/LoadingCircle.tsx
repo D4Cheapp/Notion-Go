@@ -32,7 +32,7 @@ const LoadingCircle = ({ trigger, size }: Props): React.ReactNode => {
       <Animated.View
         style={{
           ...styles.loadingCircle,
-          ...{ width: size, height: size },
+          ...{ width: size, height: size, borderWidth: size / 15 },
           transform: [{ rotate: spin }],
         }}
       />

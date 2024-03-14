@@ -11,8 +11,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   loadingCircle: {
-
-    borderWidth: 6,
     borderLeftColor: Colors.fg,
     borderRightColor: Colors.fg,
     borderBottomColor: Colors.fg,

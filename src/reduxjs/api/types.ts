@@ -17,7 +17,7 @@ export type GetTaskContentActionType = PayloadAction<{
   client: Client | null;
   task_id: string;
 }>;
-export type SetTaskContentActionType = PayloadAction<BlockType[]>;
+export type SetTaskContentActionType = PayloadAction<BlockType[] | null>;
 export type SetCheckStatusActionType = PayloadAction<{
   client: Client;
   task_id: string;

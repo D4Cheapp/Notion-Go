@@ -1,7 +1,10 @@
 import Checkbox from 'expo-checkbox';
 import React from 'react';
 import { Image, View, Text, Pressable, ScrollView } from 'react-native';
+import { Col, Row, Grid } from 'react-native-easy-grid';
 import DateProperty from '../DateProperty';
+import CheckboxBlock from './CheckboxBlock';
+import TitleBlock from './TitleBlock';
 import { styles } from './TaskFormStyles';
 import { Colors } from '@/constants/theme';
 import { BlockType } from '@/types';
@@ -17,7 +20,7 @@ interface Props {
       }
     | undefined
     | null;
-  taskContent: BlockType[] | undefined;
+  taskContent: BlockType[] | null | undefined;
   isImportant: boolean;
   isUrgent: boolean;
   onTrashClick: () => void;
@@ -31,7 +34,7 @@ const TaskForm = ({
   onTrashClick,
 }: Props): React.ReactNode => {
   const isContentLoading = useAppSelector(isTaskContentLoadingSelector);
-  const isTaskContentExist = taskContent !== undefined && taskContent.length > 0;
+  const isTaskContentExist = taskContent && taskContent.length > 0;
 
   return (
     <>
@@ -44,7 +47,7 @@ const TaskForm = ({
       <View style={styles.propertyContainer}>
         <Text style={styles.propertyTitle}>Urgent:</Text>
         <Checkbox
-          style={styles.checkbox}
+          style={styles.paramsCheckbox}
           color={isImportant ? Colors.orange : undefined}
           value={isUrgent}
         />
@@ -52,104 +55,126 @@ const TaskForm = ({
       <View style={styles.propertyContainer}>
         <Text style={styles.propertyTitle}>Important:</Text>
         <Checkbox
-          style={styles.checkbox}
+          style={styles.paramsCheckbox}
           color={isImportant ? Colors.orange : undefined}
           value={isImportant}
         />
       </View>
       <ScrollView style={styles.contentContainer}>
         {isContentLoading ? (
-          <LoadingCircle trigger={isContentLoading} size={50}/>
+          <LoadingCircle trigger={isContentLoading} size={50} />
         ) : (
           <>
             {isTaskContentExist && (
               <>
                 {taskContent.map((block) => {
-                  switch (block.type) {
-                    case 'paragraph':
-                      return (
-                        <Text key={block.blockId} style={styles.paragraph}>
-                          {block.parent}
-                        </Text>
-                      );
+                  const blockSwitch = (block: BlockType): React.ReactNode => {
+                    switch (block.type) {
+                      case 'heading_1':
+                      case 'heading_2':
+                      case 'heading_3':
+                      case 'paragraph':
+                      case 'toggle':
+                        return <TitleBlock key={block.blockId} block={block} />;
 
-                    case 'heading_1':
-                    case 'heading_2':
-                    case 'heading_3':
-                      const isToggle = block.children.length > 0;
-                      const headerType = block.type;
+                      case 'bulleted_list_item':
+                        return (
+                          <Text key={block.blockId} style={styles.paragraph}>
+                            {'●  '}
+                            {block.parent.slice(2, block.parent.length)}
+                          </Text>
+                        );
 
-                      if (isToggle) {
+                      case 'numbered_list_item':
+                        return (
+                          <Text key={block.blockId} style={styles.paragraph}>
+                            {block.parent}
+                          </Text>
+                        );
+
+                      case 'to_do':
+                        return <CheckboxBlock key={block.blockId} block={block} />;
+
+                      case 'divider':
+                        return <View key={block.blockId} style={styles.divider} />;
+
+                      case 'quote':
+                        return (
+                          <Text key={block.blockId} style={styles.quote}>
+                            {block.parent.slice(2, block.parent.length)}
+                          </Text>
+                        );
+
+                      case 'callout':
+                        return (
+                          <Text key={block.blockId} style={styles.callout}>
+                            {block.parent.slice(1, block.parent.length)}
+                          </Text>
+                        );
+
+                      case 'column_list':
                         return (
                           <View key={block.blockId}>
-                            <Text
-                              style={
-                                headerType === 'heading_1'
-                                  ? styles.headerOne
-                                  : headerType === 'heading_2'
-                                    ? styles.headerTwo
-                                    : styles.headerThree
-                              }
-                            >
-                              {block.parent.slice(2, block.parent.length)}
-                            </Text>
-                            {block.children.map((child) => (
-                              <Text key={child.blockId} style={styles.paragraph}>
-                                • {child.parent}
-                              </Text>
+                            {block.children.map((column) => (
+                              <View key={column.blockId} style={styles.column}>
+                                {/* @ts-ignore */}
+                                {column.children.map((childrenBlock: BlockType) =>
+                                  blockSwitch(childrenBlock),
+                                )}
+                              </View>
                             ))}
                           </View>
                         );
-                      } else {
+
+                      case 'table':
+                        let cells = block.parent
+                          .split('|')
+                          .filter((cell) => cell[0] !== ',' && cell !== '' && cell !== '\n');
+                        let columns = 0;
+                        for (const cell of cells) {
+                          if (cell.includes('-')) {
+                            break;
+                          } else {
+                            columns++;
+                          }
+                        }
+                        cells = cells.filter((cell) => !cell.includes('-'));
+
+                        const grid: string[][] = [];
+                        let columnsAccumulator = 0;
+                        let rowAccumulator: string[] = [];
+                        for (let index = 0; index < cells.length; index++) {
+                          if (columnsAccumulator < columns) {
+                            columnsAccumulator++;
+                            rowAccumulator.push(cells[index]);
+                          }
+                          if (index === cells.length - 1 || columnsAccumulator >= columns) {
+                            grid.push(rowAccumulator);
+                            rowAccumulator = [];
+                            columnsAccumulator = 0;
+                          }
+                        }
+
                         return (
-                          <Text
-                            key={block.blockId}
-                            style={
-                              headerType === 'heading_1'
-                                ? styles.headerOne
-                                : headerType === 'heading_2'
-                                  ? styles.headerTwo
-                                  : styles.headerThree
-                            }
-                          >
-                            {block.parent.slice(
-                              parseInt(headerType[headerType.length - 1]) + 1,
-                              block.parent.length,
-                            )}
-                          </Text>
+                          <Grid key={block.blockId} style={styles.table}>
+                            {grid.map((row, index) => (
+                              <Row key={block.children[index].blockId} style={styles.tableRow}>
+                                {row.map((column, index) => (
+                                  <Col key={index} style={styles.tableColumn}>
+                                    <Text
+                                      style={{ ...styles.paragraph, ...{ paddingVertical: 5 } }}
+                                    >
+                                      {column.trim()}
+                                    </Text>
+                                  </Col>
+                                ))}
+                              </Row>
+                            ))}
+                          </Grid>
                         );
-                      }
-
-                    case 'bulleted_list_item':
-                      return <Text key={block.blockId}></Text>;
-
-                    case 'callout':
-                      return <Text key={block.blockId}></Text>;
-
-                    case 'column_list':
-                      return <Text key={block.blockId}></Text>;
-
-                    case 'divider':
-                      return <Text key={block.blockId}></Text>;
-
-                    case 'image':
-                      return <Text key={block.blockId}></Text>;
-
-                    case 'numbered_list_item':
-                      return <Text key={block.blockId}></Text>;
-
-                    case 'quote':
-                      return <Text key={block.blockId}></Text>;
-
-                    case 'table':
-                      return <Text key={block.blockId}></Text>;
-
-                    case 'to_do':
-                      return <Text key={block.blockId}></Text>;
-
-                    case 'toggle':
-                      return <Text key={block.blockId}></Text>;
-                  }
+                    }
+                  };
+                  return blockSwitch(block);
                 })}
               </>
             )}
