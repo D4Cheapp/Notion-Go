@@ -4,6 +4,7 @@ import { Text, View } from 'react-native';
 
 interface Props {
   tasks: TaskType[];
+  completedTasks: string[];
 }
 
 const CalendarView = ({ tasks }: Props): React.ReactNode => {

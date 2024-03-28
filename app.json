@@ -4,10 +4,10 @@
     "slug": "NotionWidget",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/images/favicon.png",
+    "icon": "./src/assets/images/darkTheme/globalIcons/favicon.webp",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./src/assets/images/splash.png",
+      "image": "./src/assets/images/darkTheme/globalIcons/splash.webp",
       "resizeMode": "contain",
       "backgroundColor": "#282828"
     },
@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/images/adaptive-icon.png",
+        "foregroundImage": "./src/assets/images/darkTheme/globalIcons/adaptive-icon.webp",
         "backgroundColor": "#282828"
       },
       "package": "com.d4cheap.NotionWidget"

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { setJSExceptionHandler } from 'react-native-exception-handler';
-import ErrorsContainer from './components/ErrorsContainer';
-import { errorsSelector } from './reduxjs/base/selectors';
+import { useActions, useAppSelector } from '@/hooks/reduxHooks';
 import Todo from '@/components/Todo';
 import Header from '@/components/Header';
-import { useActions, useAppSelector } from '@/hooks/reduxHooks';
+import ErrorsContainer from './components/ErrorsContainer';
+import { errorsSelector } from './reduxjs/base/selectors';
 
 function Layout() {
   const { getClientInfo, setError } = useActions();

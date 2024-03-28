@@ -6,25 +6,20 @@
   },
   "plugins": ["@typescript-eslint", "import"],
   "extends": ["plugin:@typescript-eslint/recommended-type-checked", "prettier"],
-   "rules": {
+  "rules": {
     "import/order": [
       "error",
       {
-        "groups": [
-          "external",
-          "builtin",
-          "internal",
-          "index",
-          "parent",
-          "sibling",
-          "type"
-        ],
+        "groups": ["external", "builtin", "internal", "index", "type", "parent", "sibling"],
         "pathGroups": [
-          { "pattern": "@/src/hooks/*", "group": "internal", "position": "before" },
-          { "pattern": "@/src/components/*", "group": "internal" },
+          { "pattern": "@/hooks/*", "group": "internal", "position": "before" },
+          { "pattern": "@/components/*", "group": "internal" },
+          { "pattern": "@/reduxjs/**/*", "group": "internal" },
+          { "pattern": "@/constants/*", "group": "internal" },
+          { "pattern": "@/types", "group": "internal", "position": "after" },
           { "pattern": "../components/*", "group": "parent" },
           { "pattern": "./components/*", "group": "sibling", "position": "before" },
-          { "pattern": "./*.module.scss", "group": "sibling", "position": "after" }
+          { "pattern": "./*Styles.ts", "group": "sibling", "position": "after" }
         ]
       }
     ],

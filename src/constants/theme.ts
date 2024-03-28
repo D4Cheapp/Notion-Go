@@ -1,5 +1,6 @@
 const Colors = {
   gray: "#928374",
+  default: "#928374",
   brown: "#a55532",
   orange: "#e27c38",
   yellow: "#fabd2f",

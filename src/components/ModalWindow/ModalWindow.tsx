@@ -1,11 +1,11 @@
 import { Text, Image, Modal, View, Pressable } from 'react-native';
-import { styles } from './ModalWindowStyles';
 import { TaskType } from '@/types';
+import { styles } from './ModalWindowStyles';
 
 interface Props {
-  title: string;
   isWindowActive: boolean;
   closeAction: () => void;
+  title: string | null;
   icon?: TaskType['icon'];
   action?: () => void;
   children?: React.ReactNode;
@@ -20,7 +20,7 @@ const ModalWindow = ({
   children,
 }: Props): React.ReactNode => {
   return (
-    <Modal animationType="fade" transparent visible={isWindowActive}>
+    <Modal animationType="fade" onRequestClose={closeAction} transparent visible={isWindowActive}>
       <View style={styles.background}>
         <Pressable onPress={closeAction} style={styles.blur} />
         <View style={styles.container}>

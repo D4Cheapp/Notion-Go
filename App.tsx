@@ -5,21 +5,19 @@ import * as SplashScreen from 'expo-splash-screen';
 import { registerRootComponent } from 'expo';
 import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';
+import { Colors } from '@/constants/theme';
 import Layout from './src/layout';
 import { store } from '@/reduxjs';
-import { Colors } from '@/constants/theme';
 
 void SplashScreen.preventAutoHideAsync();
 registerRootComponent(App);
 
 function App() {
-
   const [fontsLoaded] = useFonts({
     light: require('./src/assets/fonts/Roboto-Light.ttf'),
     regular: require('./src/assets/fonts/Roboto-Regular.ttf'),
     bold: require('./src/assets/fonts/Roboto-Bold.ttf'),
   });
-
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
@@ -35,7 +33,7 @@ function App() {
     /* eslint-disable-next-line @typescript-eslint/no-misused-promises */
     <SafeAreaView onLayout={onLayoutRootView} style={styles.container}>
       <Provider store={store}>
-          <Layout />
+        <Layout />
       </Provider>
     </SafeAreaView>
   );

@@ -1,15 +1,17 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
 import { Client } from '@notionhq/client';
 import { NotionToMarkdown } from 'notion-to-md';
-import { BlockType, TaskType } from 'src/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TaskContentBlockType, TaskType } from 'src/types';
 import { apiActions } from './index';
 import { baseActions } from '../base';
 import {
   DeleteTaskActionType,
   GetAllTasksActionType,
+  GetSortedTasksActionType,
   GetTaskContentActionType,
-  SetCheckStatusActionType,
   SetClientInfoActionType,
+  SetTaskCompleteStatusActionType,
 } from './types';
 
 function* getAllTasksSaga(action: GetAllTasksActionType) {
@@ -21,35 +23,98 @@ function* getAllTasksSaga(action: GetAllTasksActionType) {
       .query({
         database_id,
         page_size: page_size ? page_size : 100,
-        sorts: [
-          {
-            property: 'Date',
-            direction: 'ascending',
-          },
-          {
-            property: 'Importance',
-            direction: 'ascending',
-          },
-          {
-            property: 'Urgency',
-            direction: 'ascending',
-          },
-          {
-            property: 'Created time',
-            direction: 'ascending',
-          },
-        ],
       })
       .then((data) => data.results)
       .catch((error) => {
         throw error;
       });
-    yield put(apiActions.setAllTasks(tasks));
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    let completedTasks: string[] | null = yield AsyncStorage.getItem('completedTasks')
+      .then((data) => {
+        if (data !== null) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+          return JSON.parse(data);
+        } else {
+          return null;
+        }
+      })
+      .catch((error) => {
+        throw error;
+      });
+
+    const isCompletedTaskExist = completedTasks !== null && completedTasks.length > 0;
+    if (isCompletedTaskExist) {
+      const tasksId = tasks.map((task) => task.id);
+      //@ts-ignore
+      completedTasks = completedTasks.filter((id) => tasksId.includes(id));
+      yield AsyncStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+    }
+    yield put(apiActions.setAllTasks({ tasks, completedTasks }));
   } catch (error: unknown) {
     const errors = error as Error;
     yield put(baseActions.setError(errors.message));
   }
   yield put(baseActions.setIsTasksLoading(false));
+}
+
+function* getSortedTasksSaga(action: GetSortedTasksActionType) {
+  yield put(baseActions.setIsTasksLoading(false));
+  const { client, database_id, sorts, page_size } = action.payload;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const tasks: TaskType[] = yield client?.databases
+      .query({
+        database_id,
+        page_size: page_size ? page_size : 100,
+        sorts,
+      })
+      .then((data) => data.results)
+      .catch((error) => {
+        throw error;
+      });
+    yield put(apiActions.setAllTasks({ tasks }));
+  } catch (error: unknown) {
+    const errors = error as Error;
+    yield put(baseActions.setError(errors.message));
+  }
+  yield put(baseActions.setIsTasksLoading(false));
+}
+
+function* setTaskCompleteStatusSaga(action: SetTaskCompleteStatusActionType) {
+  const { task_id, checked } = action.payload;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const completedTasks: string[] | null = yield AsyncStorage.getItem('completedTasks')
+      .then((data) => {
+        if (data !== null) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+          return JSON.parse(data);
+        } else {
+          return null;
+        }
+      })
+      .catch((error) => {
+        throw error;
+      });
+    const isCompletedTaskExist = completedTasks !== null && completedTasks.length > 0;
+    if (checked) {
+      if (isCompletedTaskExist) {
+        completedTasks.push(task_id);
+        yield AsyncStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+      } else {
+        yield AsyncStorage.setItem('completedTasks', JSON.stringify([task_id]));
+      }
+    } else {
+      if (isCompletedTaskExist) {
+        completedTasks.filter((id) => id !== task_id);
+        yield AsyncStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+      }
+    }
+  } catch (error: unknown) {
+    const errors = error as Error;
+    yield put(baseActions.setError(errors.message));
+  }
 }
 
 function* deleteTaskSaga(action: DeleteTaskActionType) {
@@ -68,20 +133,10 @@ function* getTaskContentSaga(action: GetTaskContentActionType) {
   if (client) {
     const n2m = new NotionToMarkdown({ notionClient: client });
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const mdBlocks: BlockType[] = yield call(() => n2m.pageToMarkdown(task_id));
+    const mdBlocks: TaskContentBlockType[] = yield call(() => n2m.pageToMarkdown(task_id));
     yield put(apiActions.setTaskContent(mdBlocks));
   }
   yield put(baseActions.setIsTaskContentLoading(false));
-}
-
-function* setCheckStatusSaga(action: SetCheckStatusActionType) {
-  const { client, task_id, checked } = action.payload;
-  try {
-    yield client.pages.update({ page_id: task_id, properties: { Done: { checkbox: checked } } });
-  } catch (error: unknown) {
-    const errors = error as Error;
-    yield put(baseActions.setError(errors.message));
-  }
 }
 
 function* getClientInfoSaga(action: SetClientInfoActionType) {
@@ -105,9 +160,10 @@ function* getClientInfoSaga(action: SetClientInfoActionType) {
 export function* apiSaga() {
   yield all([
     takeEvery(apiActions.getAllTasks, getAllTasksSaga),
+    takeEvery(apiActions.getSortedTasks, getSortedTasksSaga),
     takeEvery(apiActions.getTaskContent, getTaskContentSaga),
+    takeEvery(apiActions.setTaskCompleteStatus, setTaskCompleteStatusSaga),
     takeEvery(apiActions.deleteTask, deleteTaskSaga),
-    takeEvery(apiActions.setCheckStatus, setCheckStatusSaga),
     takeEvery(apiActions.getClientInfo, getClientInfoSaga),
   ]);
 }

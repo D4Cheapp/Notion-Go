@@ -2,19 +2,19 @@ import { StyleSheet } from 'react-native';
 import { Colors } from '@/constants/theme';
 
 export const styles = StyleSheet.create({
-  propertyContainer: {
+  deleteTaskContainer: {
     width: '100%',
-    justifyContent: 'space-between',
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingRight: '3%',
     alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 15,
   },
-  paramsCheckbox: {
-    width: 25,
-    height: 25,
-    marginTop: 5,
-    borderWidth: 3,
-    borderRadius: 7,
-    borderColor: Colors.fg,
+  deleteLogo: {
+    fontWeight: 'bold',
+    fontSize: 25,
+    color: Colors.fg,
   },
   trashImage: {
     width: 30,
@@ -27,6 +27,7 @@ export const styles = StyleSheet.create({
   },
   contentContainer: {
     width: '100%',
+    marginTop: 20,
   },
   paragraph: {
     color: Colors.fg,

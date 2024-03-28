@@ -3,22 +3,21 @@ import { Colors } from '@/constants/theme';
 
 export const styles = StyleSheet.create({
   task: {
-    width: '85%',
-    paddingHorizontal: '5%',
+    width: '100%',
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 20,
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    paddingHorizontal: '5%',
     paddingTop: 12,
     paddingBottom: 20,
   },
   divider: {
     height: 1,
-    marginHorizontal: 30,
+    marginHorizontal: 20,
     backgroundColor: 'rgba(146, 131, 116, 0.2)',
   },
   titleContainer: {
-    width: '90%',
-    gap: 10,
+    width: '70%',
   },
   icon: {
     width: 25,
@@ -32,25 +31,12 @@ export const styles = StyleSheet.create({
     margin: 0,
   },
   checkbox: {
-    width: 25,
-    height: 25,
+    width: 30,
+    height: 30,
     marginTop: 5,
     borderWidth: 3,
     borderRadius: 7,
     borderColor: Colors.fg,
   },
-  dateContainer: {
-    flexDirection: 'row',
-    gap: 7,
-  },
-  calendar: {
-    width: 20,
-    height: 20,
-    tintColor: Colors.orange,
-  },
-  trashImage: { width: 30, height: 30 },
-  priorityContainer: {
-    flexDirection: 'row',
-    gap: 10,
-  },
+  trashImage: { marginTop: 5, width: 30, height: 30 },
 });

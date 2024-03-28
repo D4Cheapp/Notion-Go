@@ -21,7 +21,7 @@ const ErrorMessage = ({ error, onCloseClick }: Props): React.ReactNode => {
         <Image
           style={styles.closeButton}
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          source={require('../../../assets/images/cross.png')}
+          source={require('../../../assets/images/darkTheme/globalIcons/cross.webp')}
         />
       </Pressable>
     </View>

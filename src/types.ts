@@ -1,5 +1,112 @@
+export type ColorNamesTypes =
+  | 'default'
+  | 'gray'
+  | 'brown'
+  | 'orange'
+  | 'yellow'
+  | 'green'
+  | 'blue'
+  | 'purple'
+  | 'pink'
+  | 'red';
+export type TaskTextType = {
+  annotations: {
+    bold: boolean;
+    code: boolean;
+    color: ColorNamesTypes;
+    italic: boolean;
+    strikethrough: boolean;
+    underline: boolean;
+  };
+  href: null | string;
+  plain_text: string | null;
+  text: { content: string; link: null | string };
+  type: 'text';
+};
+export type TitlePropertyType = {
+  id: 'title';
+  title: TaskTextType[];
+  type: 'title';
+};
+type TextPropertyType = {
+  id: string;
+  rich_text: TaskTextType[];
+  type: 'rich_text';
+};
+type NumberPropertyType = { id: string; number: number; type: 'number' };
+type SelectPropertyType = {
+  id: string;
+  select: {
+    color: ColorNamesTypes;
+    id: string;
+    name: string;
+  };
+  type: 'select';
+};
+type MultiSelectPropertyType = {
+  id: string;
+  multi_select: { color: ColorNamesTypes; id: string; name: string }[];
+  type: 'multi_select';
+};
+type StatusPropertyType = {
+  id: string;
+  status: { color: ColorNamesTypes; id: string; name: string };
+  type: 'status';
+};
+type DatePropertyType = {
+  date: {
+    end?: string;
+    start: string;
+    time_zone: null;
+  };
+  id: string;
+  type: 'date';
+};
+type FilesPropertyType = {
+  id: string;
+  files: { file: { expiry_time: string; url: string }; name: string; type: 'file' }[];
+  type: 'files';
+};
+type CheckboxPropertyType = { checkbox: boolean; id: string; type: 'checkbox' };
+type UrlPropertyType = { id: string; type: 'url'; url: string };
+type EmailPropertyType = { email: string; id: string; type: 'email' };
+type PhonePropertyType = { id: string; phone_number: string; type: 'phone_number' };
+type CreatedTimePropertyType = {
+  created_time: string;
+  description: string;
+  id: string;
+  name: string;
+  type: 'created_time';
+};
+type LastEditedTimePropertyType = {
+  id: string;
+  last_edited_time: string;
+  type: 'last_edited_time';
+};
+type IdPropertyType = {
+  id: string;
+  type: 'unique_id';
+  unique_id: { number: number; prefix: null };
+};
+export type TaskPropertyType =
+  | IdPropertyType
+  | TextPropertyType
+  | TitlePropertyType
+  | NumberPropertyType
+  | DatePropertyType
+  | SelectPropertyType
+  | CheckboxPropertyType
+  | UrlPropertyType
+  | EmailPropertyType
+  | PhonePropertyType
+  | CreatedTimePropertyType
+  | LastEditedTimePropertyType
+  | FilesPropertyType
+  | StatusPropertyType
+  | MultiSelectPropertyType;
 export type TaskType = {
   archived: boolean;
+  'Sub-item': TaskType;
   icon:
     | {
         emoji: 'string';
@@ -34,54 +141,10 @@ export type TaskType = {
     type: string;
   };
   properties: {
-    Name: {
-      id: string;
-      title: {
-        href: null | string;
-        plain_text: string;
-        text: {
-          content: string;
-          link: null | string;
-        };
-        annotations: {
-          bold: boolean;
-          code: boolean;
-          color: string;
-          italic: boolean;
-          strikethrough: string;
-          underline: boolean;
-        };
-      }[];
-      type: 'title';
-    };
-    Date?: {
-      id: string;
-      type: 'date';
-      date: {
-        end: string;
-        start: string;
-      };
-    };
-    Urgency: {
-      select: {
-        color: string;
-        id: string;
-        name: 'Не срочно' | 'Срочно';
-      } | null;
-      type: 'select';
-    };
-    Importance: {
-      select: {
-        color: string;
-        id: string;
-        name: 'Важно' | 'Не важно';
-      } | null;
-      type: 'select';
-    };
-    Done: { checkbox: boolean; id: string; type: 'checkbox' };
+    [key: string]: TaskPropertyType;
   };
 };
-export type BlockType =
+export type TaskContentBlockType =
   | {
       blockId: string;
       children: { blockId: string; parent: string; type: 'table_row' }[];
@@ -90,13 +153,13 @@ export type BlockType =
     }
   | {
       blockId: string;
-      children: BlockType[];
+      children: TaskContentBlockType[];
       parent: string;
       type: 'column_list';
     }
   | {
       blockId: string;
-      children: BlockType[];
+      children: TaskContentBlockType[];
       parent: string;
       type: 'column';
     }
@@ -114,7 +177,7 @@ export type BlockType =
     }
   | {
       blockId: string;
-      children: BlockType[];
+      children: TaskContentBlockType[];
       parent: string;
       type:
         | 'heading_1'

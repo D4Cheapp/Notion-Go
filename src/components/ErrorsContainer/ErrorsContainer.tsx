@@ -2,9 +2,9 @@
 import React, { useCallback } from 'react';
 import { SafeAreaView } from 'react-native';
 import { errorsSelector } from 'src/reduxjs/base/selectors';
+import { useActions, useAppSelector } from '@/hooks/reduxHooks';
 import { styles } from './ErrorsContainerStyles';
 import ErrorMessage from './ErrorMessage';
-import { useActions, useAppSelector } from '@/hooks/reduxHooks';
 
 const ErrorsContainer = (): React.ReactNode => {
   const errors = useAppSelector(errorsSelector);

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
+import { TaskContentBlockType } from '@/types';
 import { styles } from '../TaskFormStyles';
-import { BlockType } from '@/types';
 
 interface Props {
-  block: BlockType;
+  block: TaskContentBlockType;
 }
 
 const TitleBlock = ({ block }: Props): React.ReactNode => {
@@ -46,7 +46,7 @@ const TitleBlock = ({ block }: Props): React.ReactNode => {
           {isTitleToggle && (
             <>
               {/* @ts-ignore */}
-              {block.children.map((child: BlockType) => (
+              {block.children.map((child: TaskContentBlockType) => (
                 <Text key={child.blockId} style={{ ...styles.paragraph, ...{ marginLeft: 30 } }}>
                   {'●  '}
                   {child.parent}

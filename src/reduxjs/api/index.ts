@@ -1,36 +1,45 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice } from '@reduxjs/toolkit';
 import { Client } from '@notionhq/client';
-import { BlockType, TaskType } from 'src/types';
+import { TaskContentBlockType, TaskType } from 'src/types';
+import { SetTaskCompleteStatusActionType } from './types';
 import {
   DeleteTaskActionType,
   GetAllTasksActionType,
   GetClientInfoActionType,
+  GetSortedTasksActionType,
   GetTaskContentActionType,
   SetAllTasksActionType,
-  SetCheckStatusActionType,
+  SetAllTasksPropertiesActionType,
   SetClientInfoActionType,
-  SetTaskCheckStatusActionType,
   SetTaskContentActionType,
+  SetTaskPropertyActionType,
+  SetTaskPropertyLocalActionType,
 } from './types';
 
 interface SliceInterface {
   client: Client | null;
-  database_id: string | null;
+  databaseId: string | null;
   tasks: TaskType[];
-  taskContent: BlockType[] | null;
+  taskContent: TaskContentBlockType[] | null;
+  completedTasks: string[];
+  databaseProperties: TaskType['properties'] | null;
 }
 
 const apiSlice = createSlice({
   name: 'apiSlice',
-  initialState: { client: null } as SliceInterface,
+  initialState: { client: null, completedTasks: [] } as unknown as SliceInterface,
   reducers: {
-    getAllTasksLocal: (state) => state,
-
     getAllTasks: (state, action: GetAllTasksActionType) => state,
 
+    getSortedTasks: (state, action: GetSortedTasksActionType) => state,
+
     setAllTasks: (state, action: SetAllTasksActionType) => {
-      state.tasks = action.payload;
+      const { tasks, completedTasks } = action.payload;
+      state.tasks = tasks;
+      if (completedTasks) {
+        state.completedTasks = completedTasks;
+      }
     },
 
     getTaskContent: (state, action: GetTaskContentActionType) => state,
@@ -39,20 +48,28 @@ const apiSlice = createSlice({
       state.taskContent = action.payload;
     },
 
-    deleteTask: (state, action: DeleteTaskActionType) => {
-      const task = state.tasks;
-      task.splice(action.payload.index, 1);
-      state.tasks = task;
+    setTaskProperty: (state, action: SetTaskPropertyActionType) => state,
+
+    setTaskCompleteStatus: (state, action: SetTaskCompleteStatusActionType) => {
+      const { task_id, checked } = action.payload;
+      if (checked) {
+        state.completedTasks.push(task_id);
+      } else {
+        state.completedTasks = state.completedTasks.filter((id) => id !== task_id);
+      }
     },
 
-    setCheckStatus: (state, action: SetCheckStatusActionType) => {},
-
-    setTaskCheckStatus: (state, action: SetTaskCheckStatusActionType) => {
-      state.tasks[action.payload.index].properties.Done.checkbox = action.payload.check;
+    deleteTask: (state, action: DeleteTaskActionType) => {
+      const { index, task_id } = action.payload;
+      const isTaskComplete = state.completedTasks.includes(task_id);
+      if (isTaskComplete) {
+        state.completedTasks = state.completedTasks.filter((id) => id !== task_id);
+      }
+      state.tasks.splice(index, 1);
     },
 
     getClientInfo: (state, action: SetClientInfoActionType) => {
-      state.database_id = action.payload.database_id;
+      state.databaseId = action.payload.database_id;
     },
 
     setClientInfo: (state, action: GetClientInfoActionType) => {

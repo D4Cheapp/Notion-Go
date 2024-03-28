@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import Checkbox from 'expo-checkbox';
 import { View, Text } from 'react-native';
-import { styles } from './CheckboxStyles';
-import { BlockType } from '@/types';
 import { Colors } from '@/constants/theme';
+import { TaskContentBlockType } from '@/types';
+import { styles } from './CheckboxStyles';
 
 interface Props {
-  block: BlockType;
+  block: TaskContentBlockType;
 }
 
 const CheckboxBlock = ({ block }: Props): React.ReactNode => {

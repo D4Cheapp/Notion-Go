@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, View, Image, Text, TextInput } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { taskViewSelector } from 'src/reduxjs/base/selectors';
-import { styles } from './HeaderStyles';
-import ModalWindow from '@/components/ModalWindow';
 import { useActions, useAppSelector } from '@/hooks/reduxHooks';
+import ModalWindow from '@/components/ModalWindow';
+import { styles } from './HeaderStyles';
 
 const Header = (): React.ReactNode => {
   const [isOptionModalWindow, setOptionModalWindow] = useState(false);
@@ -57,8 +57,8 @@ const Header = (): React.ReactNode => {
           source={
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             taskView === 'calendar'
-              ? require('../../assets/images/calendar.png')
-              : require('../../assets/images/list.png')
+              ? require('../../assets/images/darkTheme/globalIcons/calendar.webp')
+              : require('../../assets/images/darkTheme/globalIcons/list.webp')
           }
         />
       </Pressable>
@@ -94,7 +94,7 @@ const Header = (): React.ReactNode => {
           <Image
             style={styles.settingsImage}
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            source={require('../../assets/images/settings.png')}
+            source={require('../../assets/images/darkTheme/globalIcons/settings.webp')}
           />
         </Pressable>
       </View>

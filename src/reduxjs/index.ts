@@ -9,12 +9,14 @@ const rootReducer = combineReducers({
   api: apiReducer,
   base: baseReducer,
 });
+
 export const reducersActions = { ...apiActions, ...baseActions };
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-    serializableCheck: false,
-  }).concat(sagaMiddleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(sagaMiddleware),
 });
 sagaMiddleware.run(rootSaga);
 export type RootStateType = ReturnType<typeof store.getState>;
